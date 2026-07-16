@@ -136,7 +136,7 @@ app/
   sitemap.ts robots.ts not-found.tsx
 
 components/
-  layout/    Header (navy utility strip + centered-logo bar), Footer,
+  layout/    Header (logo left · centred nav · CTA right), Footer,
              WhatsAppButton, BackToTop
   home/      Hero, TrustStrip, ServicePillars, WhyRimaya, CandidateBand, Testimonials
   sections/  PageHero, FeatureCards, CTASection   ← reusable across pages
@@ -287,17 +287,17 @@ bigger volume play); job-board backend (email-only vs email + submissions dashbo
    `next.config.ts`. It emits the CSS twice (once inline, once in the RSC payload),
    which grew each page's HTML by ~204KB to save one request for a stylesheet
    that's only ~12.5KB gzipped. Measure before re-enabling.
-9. **The Header is `fixed` + a spacer, not `sticky`.** The utility strip collapses
-   on scroll; a sticky header stays in flow, so collapsing it would shorten the
-   document and jump the page 40px. The spacer (`h-16 lg:h-[7.5rem]`) must equal
-   the *unscrolled* heights (mobile 64; desktop 40 + 80).
-   ⚠️ The strip is also **dismissible, and the state lives in three places that
-   must agree**: the pre-paint script in `layout.tsx` (sets
-   `html[data-strip="off"]`), the matching CSS in `globals.css`, and `Header`'s
-   `stripDismissed`. React can't own the initial state — seeding it from
-   localStorage during render is a hydration mismatch (see #4) — so CSS covers
-   the frames before hydration and React takes over after. Change a spacer
-   height and you must change it in both `Header` and `globals.css`.
+9. **The Header is `fixed` + a spacer, not `sticky`.** The bar shrinks on scroll
+   (80px → 68px); a sticky header stays in flow, so shrinking it would shorten
+   the document and jump the page. The spacer (`h-16 lg:h-20`) must equal the
+   *unscrolled* heights (mobile 64, desktop 80). Verify by measuring an element's
+   document position before and after scrolling — drift should be 0px.
+   ⚠️ **A pre-paint inline script that sets an attribute on `<html>` is a
+   hydration mismatch**, even though it runs before React. There used to be a
+   dismissible utility strip whose state was seeded this way (`data-strip="off"`);
+   React compared the server's HTML to the mutated DOM and reported the diff on
+   every load. It was removed. If you ever reintroduce pre-paint DOM state, the
+   element you mutate needs `suppressHydrationWarning` — see #12.
 10. **Size the logo's INK, not its box.** The two files carry very different
    internal padding — measured from the pixels: `Logo-1_1` is 95% glyph
    (ink 416×425 in a 432×447 box), `Logo-1_2` only 78% letterform
@@ -311,6 +311,13 @@ bigger volume play); job-board backend (email-only vs email + submissions dashbo
 11. **JSX ate a space** in `` `{a} of {b} live roles` `` → rendered "9live". Where an
    expression butts against text across a line wrap, use a template literal or an
    explicit `{" "}` — and check the rendered DOM, not the source.
+12. **`<body>` carries `suppressHydrationWarning`, deliberately.** Browser
+   extensions (Grammarly's `data-gr-ext-installed`, password managers) inject
+   attributes into `<body>` before React hydrates, which React reports as a
+   mismatch on the developer's machine only — visitors without the extension
+   never hit it. The prop is scoped to `<body>`'s **own attributes**, not its
+   children, so a real mismatch inside the tree still surfaces. Don't spread it
+   onto other elements to silence warnings — that hides genuine bugs.
 
 ### Verifying visually
 Screenshots via Playwright driving system Edge/Chrome (`channel: "msedge"`, no browser

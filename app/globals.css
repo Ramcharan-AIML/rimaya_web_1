@@ -159,28 +159,6 @@ h1, h2, h3, h4, h5 {
 }
 
 /* ------------------------------------------------------------
-   Dismissed utility strip — pre-paint state.
-   The flag is set by the inline script in app/layout.tsx before first paint;
-   these rules are what a returning visitor sees for the frames before React
-   hydrates. They must stay in lockstep with Header.tsx: the spacer heights here
-   are the same numbers as its `stripDismissed` branch (mobile 4rem; desktop
-   5rem = the 80px main bar with no 40px strip above it).
-   ------------------------------------------------------------ */
-html[data-strip="off"] [data-strip-bar] {
-  display: none;
-}
-
-html[data-strip="off"] [data-header-spacer] {
-  height: 4rem;
-}
-
-@media (min-width: 1024px) {
-  html[data-strip="off"] [data-header-spacer] {
-    height: 5rem;
-  }
-}
-
-/* ------------------------------------------------------------
    Utilities
    ------------------------------------------------------------ */
 .hairline {

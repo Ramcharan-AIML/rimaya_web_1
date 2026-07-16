@@ -22,25 +22,24 @@ import { services, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 /**
- * Two-tier header: a navy utility strip over the main bar.
- *
- * The strip exists because this is a lead-gen site — the phone number and the
- * 12-hour promise are the two facts most likely to turn a reader into an
- * enquiry, and burying them in the footer wastes them. It collapses on scroll
- * so the bar you actually navigate with stays compact.
+ * Single-bar header: logo left, nav centred, CTA right.
  *
  * ⚠️ The header is `fixed`, not `sticky`, and pairs with the spacer below it.
- * Sticky keeps the element in flow, so collapsing the strip on scroll would
- * shorten the document and jump the page 40px. Fixed + a constant-height spacer
- * means the collapse costs nothing. If you change the bar heights, change the
- * spacer to match.
+ * Fixed takes the bar out of flow, so the spacer is what stops the page sliding
+ * up underneath it. The spacer must equal the bar's *unscrolled* height —
+ * mobile 64px, desktop 80px. Change one, change the other.
+ *
+ * The bar shrinks 80px → 68px on scroll. That costs nothing in layout terms
+ * precisely because it's fixed: the spacer stays put and the document never
+ * reflows.
  */
 
-const leftLinks = [
+// One list, rendered once in the centre. Contact stays a nav link rather than
+// folding into the CTA — "Get a Quote" is the priced enquiry, "Contact" is the
+// low-commitment question, and collapsing them loses the softer entry point.
+const navLinks = [
   { label: "Services", href: "/#services", hasDropdown: true },
   { label: "Jobs", href: "/jobs" },
-];
-const rightLinks = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -56,27 +55,8 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
-  // Always starts `false` so the server and the client's first render agree.
-  // The pre-paint script + CSS hide the strip for a returning visitor; this
-  // effect then hands ownership to React. Never seed it from localStorage
-  // during render — that is a hydration mismatch.
-  const [stripDismissed, setStripDismissed] = useState(false);
   const servicesRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-
-  useEffect(() => {
-    if (document.documentElement.dataset.strip === "off") setStripDismissed(true);
-  }, []);
-
-  const dismissStrip = () => {
-    setStripDismissed(true);
-    document.documentElement.dataset.strip = "off";
-    try {
-      localStorage.setItem("rimaya:strip", "off");
-    } catch {
-      // Private mode / storage disabled: the strip still closes for this visit.
-    }
-  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -116,55 +96,6 @@ export default function Header() {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50">
-        {/* Utility strip — desktop only; on mobile the CTA has to win the space.
-            Unmounted rather than class-hidden once dismissed, so it can't be
-            reached by keyboard while invisible. */}
-        {!stripDismissed && (
-          <div
-            data-strip-bar
-            className={cn(
-              "hidden overflow-hidden bg-brand text-white transition-[max-height,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] lg:block",
-              scrolled ? "max-h-0 opacity-0" : "max-h-10 opacity-100",
-            )}
-          >
-            <Container>
-              <div className="flex h-10 items-center justify-between text-xs">
-                <p className="inline-flex items-center gap-2 text-white/75">
-                  <Clock className="h-3.5 w-3.5" aria-hidden />
-                  {site.responsePromise} — {site.descriptor}
-                </p>
-                <div className="flex items-center gap-6">
-                  <a
-                    href={site.phoneHref}
-                    className="inline-flex items-center gap-2 font-medium text-white/85 transition-colors hover:text-white"
-                  >
-                    <Phone className="h-3.5 w-3.5" aria-hidden />
-                    {site.phone}
-                  </a>
-                  <span aria-hidden className="h-3 w-px bg-white/20" />
-                  <a
-                    href={`mailto:${site.email}`}
-                    className="inline-flex items-center gap-2 font-medium text-white/85 transition-colors hover:text-white"
-                  >
-                    <Mail className="h-3.5 w-3.5" aria-hidden />
-                    {site.email}
-                  </a>
-                  <span aria-hidden className="h-3 w-px bg-white/20" />
-                  <button
-                    type="button"
-                    onClick={dismissStrip}
-                    aria-label="Dismiss contact bar"
-                    title="Dismiss"
-                    className="-mr-1.5 inline-flex h-6 w-6 cursor-pointer items-center justify-center text-white/60 transition-colors hover:bg-white/10 hover:text-white"
-                  >
-                    <X className="h-3.5 w-3.5" aria-hidden />
-                  </button>
-                </div>
-              </div>
-            </Container>
-          </div>
-        )}
-
         {/* Main bar */}
         <div
           className={cn(
@@ -176,16 +107,23 @@ export default function Header() {
         >
           <Container>
             {/* Desktop. Equal 1fr rails either side of an auto centre column
-                keep the logo optically centred regardless of link widths. */}
+                put the nav at the true optical centre of the bar — the logo and
+                the CTA are different widths, so a plain flex row would push it
+                off-centre by half that difference. */}
             <div
               className={cn(
-                "hidden grid-cols-[1fr_auto_1fr] items-center transition-[height] duration-300 lg:grid",
+                "hidden grid-cols-[1fr_auto_1fr] items-center gap-8 transition-[height] duration-300 lg:grid",
                 scrolled ? "h-[68px]" : "h-20",
               )}
             >
-              {/* Left cluster */}
-              <nav className="flex items-center gap-9" aria-label="Primary">
-                {leftLinks.map((item) =>
+              {/* Logo — left rail */}
+              <div className="flex justify-start">
+                <Logo />
+              </div>
+
+              {/* Nav — centre */}
+              <nav className="flex items-center justify-center gap-9" aria-label="Primary">
+                {navLinks.map((item) =>
                   item.hasDropdown ? (
                     <div
                       key={item.label}
@@ -217,10 +155,11 @@ export default function Header() {
 
                       <div
                         className={cn(
-                          // Left-anchored, not centred: "Services" sits near the
-                          // viewport edge, so a centred panel hangs off-screen
-                          // and clips its own icon column.
-                          "absolute left-0 top-full w-[27rem] pt-4 transition-all duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                          // Centred under its trigger. This was left-anchored
+                          // when "Services" sat out by the viewport edge, where
+                          // a centred panel hung off-screen. Now the nav is in
+                          // the middle there is room either side.
+                          "absolute left-1/2 top-full w-[27rem] -translate-x-1/2 pt-4 transition-all duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]",
                           servicesOpen
                             ? "visible translate-y-0 opacity-100"
                             : "invisible -translate-y-1 opacity-0",
@@ -289,22 +228,8 @@ export default function Header() {
                 )}
               </nav>
 
-              {/* Centred logo */}
-              <div className="flex justify-center px-10">
-                <Logo />
-              </div>
-
-              {/* Right cluster */}
-              <div className="flex items-center justify-end gap-9">
-                {rightLinks.map((item) => (
-                  <NavLink
-                    key={item.label}
-                    href={item.href}
-                    active={isActive(item.href)}
-                  >
-                    {item.label}
-                  </NavLink>
-                ))}
+              {/* CTA — right rail */}
+              <div className="flex items-center justify-end">
                 <Button
                   href="/contact?intent=quote"
                   size="md"
@@ -370,9 +295,11 @@ export default function Header() {
                 })}
               </ul>
 
+              {/* Services already has its own section above, with blurbs. */}
               <ul className="mt-6 border-t border-hairline">
-                {[...leftLinks.filter((l) => !l.hasDropdown), ...rightLinks].map(
-                  (item) => (
+                {navLinks
+                  .filter((l) => !l.hasDropdown)
+                  .map((item) => (
                     <li key={item.label} className="border-b border-hairline">
                       <Link
                         href={item.href}
@@ -386,8 +313,7 @@ export default function Header() {
                         <ArrowRight className="h-4 w-4 text-muted" aria-hidden />
                       </Link>
                     </li>
-                  ),
-                )}
+                  ))}
               </ul>
 
               <div className="pt-6">
@@ -428,16 +354,10 @@ export default function Header() {
         )}
       </header>
 
-      {/* Spacer for the fixed header. Must equal the *unscrolled* bar heights:
-          mobile 64px; desktop 40 (utility) + 80 (main) = 120px — or just the
-          80px bar once the strip is dismissed. The same numbers are duplicated
-          in the html[data-strip="off"] rules in globals.css, which cover the
-          frames before hydration; change one, change both. */}
-      <div
-        data-header-spacer
-        aria-hidden
-        className={cn("h-16", stripDismissed ? "lg:h-20" : "lg:h-[7.5rem]")}
-      />
+      {/* Spacer for the fixed header. Must equal the *unscrolled* bar height:
+          mobile 64px, desktop 80px. It stays constant while the bar shrinks on
+          scroll — that's the point of fixed + spacer. */}
+      <div aria-hidden className="h-16 lg:h-20" />
     </>
   );
 }

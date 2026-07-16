@@ -33,7 +33,7 @@ const pairs: { without: string; with: string }[] = [
 // NOTE: placeholder metrics — replace with the client's real, verifiable numbers
 // before launch. Unverifiable stats undermine the credibility this section exists to build.
 const stats = [
-  { value: 12, suffix: "h", label: "Typical reply time", sub: "Often much sooner" },
+  { value: 12, suffix: "h", label: "Turn around time", sub: "Often much sooner" },
   { value: 100, suffix: "%", label: "Payroll runs on time", sub: "Across all clients" },
   { value: 250, suffix: "+", label: "Workers paid monthly", sub: "And growing" },
   { value: 4.4, decimals: 1, suffix: "★", label: "Client rating", sub: "Rated by real clients" },
