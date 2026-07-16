@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import backgroundTexture from "@/public/images/background_texture.webp";
 import { ChevronRight } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
@@ -23,12 +24,14 @@ export default function PageHero({
 }) {
   return (
     <section className="relative isolate overflow-hidden bg-hero-wash border-b border-hairline">
-      {/* Soft blue texture wash */}
+      {/* Soft blue texture wash. Above the fold on every page it appears, so it
+          loads eagerly — lazy-loading a full-bleed backdrop pops in visibly. */}
       <Image
-        src="/images/background_texture.png"
+        src={backgroundTexture}
         alt=""
         aria-hidden
         fill
+        preload
         sizes="100vw"
         className="-z-10 object-cover opacity-70"
       />

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import heroBackdrop from "@/public/images/hero_image_back.webp";
 import { ArrowRight, Clock } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
@@ -19,13 +20,15 @@ export default function Hero() {
       {/* 3D showcase artwork. The art clusters at the left and right edges and
           leaves the centre open, which is exactly where the message sits — so
           it frames the headline instead of fighting it. Decorative only.
-          `priority`: this is the LCP element. */}
+          `preload`: this is the LCP element (`priority` is deprecated in Next 16).
+          Static import so the blur placeholder is generated at build time. */}
       <Image
-        src="/images/hero_image_back.png"
+        src={heroBackdrop}
         alt=""
         aria-hidden
         fill
-        priority
+        preload
+        placeholder="blur"
         sizes="100vw"
         className="-z-20 object-cover"
       />

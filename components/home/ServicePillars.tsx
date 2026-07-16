@@ -1,4 +1,5 @@
 import Image from "next/image";
+import showcaseBackdrop from "@/public/images/hero_image_back.webp";
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import Container from "@/components/ui/Container";
@@ -22,7 +23,7 @@ type Pillar = {
 // off before launch.
 const pillars: Pillar[] = [
   {
-    icon: "/images/payroll_icon.png",
+    icon: "/images/payroll_icon.webp",
     name: "Payroll Solutions",
     tag: "Flagship",
     blurb:
@@ -38,7 +39,7 @@ const pillars: Pillar[] = [
     cta: "Explore Payroll",
   },
   {
-    icon: "/images/recruitment_icon.png",
+    icon: "/images/recruitment_icon.webp",
     name: "Recruitment",
     blurb:
       "Hire the right people faster — temporary or permanent. Backed by a live job board and a growing pool of vetted candidates.",
@@ -52,7 +53,7 @@ const pillars: Pillar[] = [
     cta: "See Recruitment",
   },
   {
-    icon: "/images/consultation_icon.png",
+    icon: "/images/consultation_icon.webp",
     name: "Consulting",
     blurb:
       "Strategic advisory to help you tighten operations and grow with confidence. Practical guidance for when the decision matters.",
@@ -81,12 +82,14 @@ export default function ServicePillars() {
       // Works with no visible join.
       className="relative isolate scroll-mt-24 overflow-hidden border-t border-hairline py-20 sm:py-28"
     >
-      {/* 3D showcase artwork + scrim. Decorative only. */}
+      {/* 3D showcase artwork + scrim. Decorative only. Below the fold, so it
+          stays lazy and blurs up rather than landing as a blank band. */}
       <Image
-        src="/images/hero_image_back.png"
+        src={showcaseBackdrop}
         alt=""
         aria-hidden
         fill
+        placeholder="blur"
         sizes="100vw"
         className="-z-20 object-cover"
       />

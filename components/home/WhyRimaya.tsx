@@ -1,4 +1,5 @@
 import Image from "next/image";
+import teamPhoto from "@/public/images/about_team.webp";
 import {
   PiggyBank,
   Timer,
@@ -113,9 +114,10 @@ export default function WhyRimaya() {
           <StaggerItem className="lg:col-span-2">
             <div className="relative h-full min-h-[13rem] overflow-hidden">
               <Image
-                src="/images/about_team.png"
+                src={teamPhoto}
                 alt="The Rimaya team at work"
                 fill
+                placeholder="blur"
                 sizes="(min-width: 1024px) 66vw, 100vw"
                 className="object-cover"
               />

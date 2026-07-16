@@ -76,6 +76,10 @@ Defined in [`app/globals.css`](app/globals.css) under `@theme`.
 **Hard rules:**
 1. **`action` blue is reserved for things you click.** Never decorative. One bright
    button on a white/navy screen is magnetic; bright blue everywhere kills its meaning.
+   **But `action` is a light-surface colour.** On a navy band it sits a shade off
+   the background and reads as disabled — there, **white is the primary button**
+   (`variant="onDark"`) and the secondary is `outlineOnDark`. Putting an `action`
+   button next to a white one on navy inverts the hierarchy you meant.
 2. **Sharp 90° corners everywhere** — enforced globally via `* { border-radius: 0 }`.
    Never add `rounded-*` classes.
 3. **60/30/10** — ~60% white/surface, ~30% deep blue + neutrals, ~10% action blue.
@@ -87,6 +91,11 @@ White base + soft light-blue gradient washes; **never two identical backgrounds
 touching**. Helper classes in `globals.css`:
 - `.bg-hero-wash` — hero gradient (pair with the `background_texture.png` image layer)
 - `.bg-soft-blue` — soft blue band
+- `.bg-azure-wash` / `.bg-azure-mint` — Azure-style pastel washes (lavender ·
+  cyan · mint blooms on white). Used on the homepage: `WhatIsRimaya` and
+  `WhyRimaya`. ⚠️ **Backgrounds only, and keep every bloom under ~0.2 alpha.**
+  These are light, not brand colours — saturate them or put the hues on text,
+  borders, or icons and they start competing with `action` blue.
 - `.bg-brand-band` — **dark navy band** (footer, CTA sections). Self-contained: grid
   texture + glow + gradient + solid navy fallback in ONE background stack.
   ⚠️ **Do not add `.bg-grid` alongside it** — a second `background-image` rule
@@ -127,7 +136,8 @@ app/
   sitemap.ts robots.ts not-found.tsx
 
 components/
-  layout/    Header (centered-logo nav), Footer, WhatsAppButton, BackToTop
+  layout/    Header (navy utility strip + centered-logo bar), Footer,
+             WhatsAppButton, BackToTop
   home/      Hero, TrustStrip, ServicePillars, WhyRimaya, CandidateBand, Testimonials
   sections/  PageHero, FeatureCards, CTASection   ← reusable across pages
   jobs/      JobCard, JobsExplorer (client filters), ApplicationForm (client)
@@ -188,19 +198,38 @@ works in development. With a key, they email `RIMAYA_INBOX`. Copy `.env.example`
 
 ## 8. Images
 
-Source files in `Images/`, served copies in `public/images/`. Always use `next/image`.
+Original PNGs in `Images/` (source of truth, not served). Served copies in
+`public/images/` are **WebP** — the PNGs were 1.3–2MB each of photographic art,
+which is the wrong format for the job; converting cut 10.55MB to 0.51MB (−95%)
+with no visible loss. **Always use `next/image`.**
 
 | File | Placed in |
 | --- | --- |
-| `Logo-1_1.png` + `Logo-1_2.png` | `components/ui/Logo.tsx` — R-mark + wordmark, side by side |
-| `rimaya-hero-office.png` | Homepage hero |
-| `payroll.png` | Payroll page (branded Rimaya dashboard) |
-| `recruitment.png` | Recruitment page ("Our approach") |
-| `about_team.png` | About page ("Our story") |
-| `background_texture.png` | Hero + PageHero wash layer |
+| `Logo-1_1.webp` + `Logo-1_2.webp` | `components/ui/Logo.tsx` — R-mark + wordmark, side by side |
+| `hero_image_back.webp` | Homepage hero (LCP) + ServicePillars backdrop |
+| `payroll.webp` | Payroll page (branded Rimaya dashboard) |
+| `recruitment.webp` | Recruitment page ("Our approach") |
+| `about_team.webp` | About page ("Our story") + WhyRimaya photo tile |
+| `which_one.webp` | QuoteBand (London skyline) |
+| `background_texture.webp` | PageHero wash layer |
+| `*_icon.webp` | ServicePillars card icons (referenced by string path) |
+
+**Prefer a static import** (`import hero from "@/public/images/x.webp"`) over a
+string `src`. It gives a build-time blur placeholder (`placeholder="blur"`),
+intrinsic dimensions, and a content-hashed immutable URL. String paths are fine
+where the src is data-driven, as with the pillar icons.
+
+To re-add art: drop the original in `Images/`, convert to WebP into
+`public/images/` (sharp is already available: `.webp({ quality: 80, effort: 6 })`
+for photos, `90` for flat art with alpha), then import it.
 
 ⚠️ The logos are **deep blue** — great on white, low contrast on navy. On dark bands
 use `<Logo variant="light" />` (R-mark on a white tile + white text wordmark).
+
+**Favicons** (`app/favicon.ico`, `app/icon.png`, `app/apple-icon.png`) are generated
+from the R-mark. `favicon.ico` is a real 16/32/48/256 multi-size ICO — browsers
+downscale a lone 256px entry badly. `apple-icon` sits on a **white** tile because
+iOS composites transparency onto black.
 
 ---
 
@@ -246,6 +275,42 @@ bigger volume play); job-board backend (email-only vs email + submissions dashbo
    during scaffold (relevant only if re-scaffolding).
 6. **Windows:** the `ui-ux-pro-max` skill's Python scripts need
    `PYTHONUTF8=1 PYTHONIOENCODING=utf-8`, and `python` (not `python3`).
+   ⚠️ Also: piping a file through PowerShell (`Get-Content | Set-Content`) mangles
+   em-dashes unless you pass `-Encoding utf8`. Prefer the editing tools.
+7. **`next/image`'s `priority` prop is deprecated in Next 16** — it's `preload` now.
+   Don't reintroduce `priority`; it's in a lot of training data and older answers.
+   Use `preload` only for genuinely above-the-fold art (the LCP hero, the PageHero
+   wash). For anything else the docs prefer `loading="eager"` / `fetchPriority`,
+   which is what the Logo uses — it's small and above the fold, but preloading it
+   on every page would compete with the LCP image.
+8. **`experimental.inlineCss` was measured and rejected** — see the note in
+   `next.config.ts`. It emits the CSS twice (once inline, once in the RSC payload),
+   which grew each page's HTML by ~204KB to save one request for a stylesheet
+   that's only ~12.5KB gzipped. Measure before re-enabling.
+9. **The Header is `fixed` + a spacer, not `sticky`.** The utility strip collapses
+   on scroll; a sticky header stays in flow, so collapsing it would shorten the
+   document and jump the page 40px. The spacer (`h-16 lg:h-[7.5rem]`) must equal
+   the *unscrolled* heights (mobile 64; desktop 40 + 80).
+   ⚠️ The strip is also **dismissible, and the state lives in three places that
+   must agree**: the pre-paint script in `layout.tsx` (sets
+   `html[data-strip="off"]`), the matching CSS in `globals.css`, and `Header`'s
+   `stripDismissed`. React can't own the initial state — seeding it from
+   localStorage during render is a hydration mismatch (see #4) — so CSS covers
+   the frames before hydration and React takes over after. Change a spacer
+   height and you must change it in both `Header` and `globals.css`.
+10. **Size the logo's INK, not its box.** The two files carry very different
+   internal padding — measured from the pixels: `Logo-1_1` is 95% glyph
+   (ink 416×425 in a 432×447 box), `Logo-1_2` only 78% letterform
+   (ink 767×116 in a 787×149 box). So equal-looking `height` values lie: 34px/24px
+   rendered a 32px glyph against 19px letters (ratio 1.7 — the mark visibly
+   dwarfing the name). `Logo.tsx` works backwards from the ink instead: set `CAP`
+   (on-screen cap height) and the boxes derive from the measured ratios. That is
+   why the two boxes end up nearly the same height (29 vs 26) — it looks wrong in
+   the code and right on screen. Verify by measuring the rendered `<img>` boxes,
+   not by eyeballing the numbers.
+11. **JSX ate a space** in `` `{a} of {b} live roles` `` → rendered "9live". Where an
+   expression butts against text across a line wrap, use a template literal or an
+   explicit `{" "}` — and check the rendered DOM, not the source.
 
 ### Verifying visually
 Screenshots via Playwright driving system Edge/Chrome (`channel: "msedge"`, no browser
@@ -254,7 +319,39 @@ content below the fold is captured at `opacity: 0` and pages look empty.
 
 ---
 
-## 12. Planning docs
+## 12. Deployment
+
+**Target: Vercel.** Push to `master` and import the repo — the defaults are correct,
+so there is no `vercel.json` to maintain. `.vercelignore` keeps `Images/` and `docs/`
+out of the upload; they're source material, not build inputs.
+
+**Set these environment variables in the Vercel dashboard** (Project → Settings →
+Environment Variables), matching `.env.example`:
+
+| Variable | Consequence if missing |
+| --- | --- |
+| `RESEND_API_KEY` | ⚠️ **Forms silently stop emailing.** Submissions fall back to a server-console log — fine in dev, invisible in production. A lead that goes nowhere is lost business (§7). |
+| `RIMAYA_INBOX` | Enquiries and applications have nowhere to land. |
+| `RIMAYA_FROM` | Must be a **verified** Resend sender for the real domain, or delivery fails. |
+
+⚠️ **`lib/site.ts` → `url` drives `sitemap.ts`, `robots.ts`, and `metadataBase`.**
+A wrong domain there ships wrong canonical URLs and a wrong sitemap — see §10.
+
+**After the first deploy, verify rather than assume:** submit the contact form and a
+job application with a real CV and confirm both arrive in `RIMAYA_INBOX`. The build
+passing tells you nothing about whether email is wired up.
+
+### Performance decisions already made — don't undo them
+- Served art is **WebP** (§8); `next/image` re-encodes to **AVIF**, then WebP, per the
+  browser's `Accept` header (`next.config.ts`).
+- The optimiser's `minimumCacheTTL` is **1 year**. Safe because static imports are
+  content-hashed, so replacing a file changes its URL.
+- `poweredByHeader` is off.
+- See §11.7 (`priority` → `preload`) and §11.8 (`inlineCss` rejected, with numbers).
+
+---
+
+## 13. Planning docs
 
 Full reasoning lives in [`docs/`](docs/):
 - `rimaya-build-brief.md` — original client brief

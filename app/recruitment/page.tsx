@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import recruiterHandshake from "@/public/images/recruitment.webp";
 import {
   Users,
   Clock,
@@ -103,9 +104,10 @@ export default function RecruitmentPage() {
             <Reveal>
               <div className="relative aspect-[3/2] w-full overflow-hidden border border-hairline card-shadow">
                 <Image
-                  src="/images/recruitment.png"
+                  src={recruiterHandshake}
                   alt="A Rimaya recruiter welcoming a candidate with a handshake in a modern office"
                   fill
+                  placeholder="blur"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                 />

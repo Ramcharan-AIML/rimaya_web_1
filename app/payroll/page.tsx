@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import payrollDashboard from "@/public/images/payroll.webp";
 import Link from "next/link";
 import {
   Calculator,
@@ -142,9 +143,10 @@ export default function PayrollPage() {
             <Reveal delay={0.1}>
               <div className="relative aspect-[3/2] w-full overflow-hidden border border-hairline card-shadow">
                 <Image
-                  src="/images/payroll.png"
+                  src={payrollDashboard}
                   alt="The Rimaya payroll dashboard open on a laptop, showing employee totals, payroll summary, and compliance updates"
                   fill
+                  placeholder="blur"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                 />

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import teamPhoto from "@/public/images/about_team.webp";
 import {
   CalendarCheck,
   BadgeCheck,
@@ -160,9 +161,10 @@ export default function AboutPage() {
               <div className="relative">
                 <div className="relative aspect-[3/2] w-full overflow-hidden border border-hairline card-shadow">
                   <Image
-                    src="/images/about_team.png"
+                    src={teamPhoto}
                     alt="The Rimaya team working together around a desk in their office"
                     fill
+                    placeholder="blur"
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     className="object-cover"
                   />

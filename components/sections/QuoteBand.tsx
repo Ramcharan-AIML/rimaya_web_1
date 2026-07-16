@@ -1,4 +1,5 @@
 import Image from "next/image";
+import skyline from "@/public/images/which_one.webp";
 import { Building2, UserRound, Clock, ArrowRight, type LucideIcon } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
@@ -51,10 +52,11 @@ export default function QuoteBand() {
       {/* London at blue hour: the UK trust signal this section trades on, and
           already brand-blue so it needs no colour correction. Decorative. */}
       <Image
-        src="/images/which_one.png"
+        src={skyline}
         alt=""
         aria-hidden
         fill
+        placeholder="blur"
         sizes="100vw"
         className="-z-20 object-cover"
       />
