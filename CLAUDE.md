@@ -322,8 +322,15 @@ content below the fold is captured at `opacity: 0` and pages look empty.
 ## 12. Deployment
 
 **Target: Vercel.** Push to `master` and import the repo — the defaults are correct,
-so there is no `vercel.json` to maintain. `.vercelignore` keeps `Images/` and `docs/`
-out of the upload; they're source material, not build inputs.
+so there is no `vercel.json` to maintain.
+
+⚠️ **Don't add a `.vercelignore` to skip uploading `Images/`.** It was tried and it
+broke the deploy. A pattern without a leading slash (`Images/`) matches a directory
+of that name *at any depth*, and Vercel's matcher folds case — so it also matched
+`public/images/` and deleted the served art, failing every static image import at
+build. The tell: only the files with static imports fail, since string `src` paths
+resolve at runtime. Saving ~10MB of upload isn't worth that. If it's ever genuinely
+needed, anchor it to the root (`/Images/`) and verify on a preview deploy.
 
 **Set these environment variables in the Vercel dashboard** (Project → Settings →
 Environment Variables), matching `.env.example`:

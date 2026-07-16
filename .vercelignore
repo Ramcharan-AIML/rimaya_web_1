@@ -1,5 +1,0 @@
-# Source art and planning docs stay in git but are not needed to build the site.
-# Only public/images/ is served (see CLAUDE.md §8), so shipping the ~10MB of
-# original PNGs to the builder just slows every deploy down.
-Images/
-docs/
