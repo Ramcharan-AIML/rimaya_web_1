@@ -56,8 +56,27 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  // Always starts `false` so the server and the client's first render agree.
+  // The pre-paint script + CSS hide the strip for a returning visitor; this
+  // effect then hands ownership to React. Never seed it from localStorage
+  // during render — that is a hydration mismatch.
+  const [stripDismissed, setStripDismissed] = useState(false);
   const servicesRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (document.documentElement.dataset.strip === "off") setStripDismissed(true);
+  }, []);
+
+  const dismissStrip = () => {
+    setStripDismissed(true);
+    document.documentElement.dataset.strip = "off";
+    try {
+      localStorage.setItem("rimaya:strip", "off");
+    } catch {
+      // Private mode / storage disabled: the strip still closes for this visit.
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -97,39 +116,54 @@ export default function Header() {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50">
-        {/* Utility strip — desktop only; on mobile the CTA has to win the space. */}
-        <div
-          className={cn(
-            "hidden overflow-hidden bg-brand text-white transition-[max-height,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] lg:block",
-            scrolled ? "max-h-0 opacity-0" : "max-h-10 opacity-100",
-          )}
-        >
-          <Container>
-            <div className="flex h-10 items-center justify-between text-xs">
-              <p className="inline-flex items-center gap-2 text-white/75">
-                <Clock className="h-3.5 w-3.5" aria-hidden />
-                {site.responsePromise} — {site.descriptor}
-              </p>
-              <div className="flex items-center gap-6">
-                <a
-                  href={site.phoneHref}
-                  className="inline-flex items-center gap-2 font-medium text-white/85 transition-colors hover:text-white"
-                >
-                  <Phone className="h-3.5 w-3.5" aria-hidden />
-                  {site.phone}
-                </a>
-                <span aria-hidden className="h-3 w-px bg-white/20" />
-                <a
-                  href={`mailto:${site.email}`}
-                  className="inline-flex items-center gap-2 font-medium text-white/85 transition-colors hover:text-white"
-                >
-                  <Mail className="h-3.5 w-3.5" aria-hidden />
-                  {site.email}
-                </a>
+        {/* Utility strip — desktop only; on mobile the CTA has to win the space.
+            Unmounted rather than class-hidden once dismissed, so it can't be
+            reached by keyboard while invisible. */}
+        {!stripDismissed && (
+          <div
+            data-strip-bar
+            className={cn(
+              "hidden overflow-hidden bg-brand text-white transition-[max-height,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] lg:block",
+              scrolled ? "max-h-0 opacity-0" : "max-h-10 opacity-100",
+            )}
+          >
+            <Container>
+              <div className="flex h-10 items-center justify-between text-xs">
+                <p className="inline-flex items-center gap-2 text-white/75">
+                  <Clock className="h-3.5 w-3.5" aria-hidden />
+                  {site.responsePromise} — {site.descriptor}
+                </p>
+                <div className="flex items-center gap-6">
+                  <a
+                    href={site.phoneHref}
+                    className="inline-flex items-center gap-2 font-medium text-white/85 transition-colors hover:text-white"
+                  >
+                    <Phone className="h-3.5 w-3.5" aria-hidden />
+                    {site.phone}
+                  </a>
+                  <span aria-hidden className="h-3 w-px bg-white/20" />
+                  <a
+                    href={`mailto:${site.email}`}
+                    className="inline-flex items-center gap-2 font-medium text-white/85 transition-colors hover:text-white"
+                  >
+                    <Mail className="h-3.5 w-3.5" aria-hidden />
+                    {site.email}
+                  </a>
+                  <span aria-hidden className="h-3 w-px bg-white/20" />
+                  <button
+                    type="button"
+                    onClick={dismissStrip}
+                    aria-label="Dismiss contact bar"
+                    title="Dismiss"
+                    className="-mr-1.5 inline-flex h-6 w-6 cursor-pointer items-center justify-center text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+                  >
+                    <X className="h-3.5 w-3.5" aria-hidden />
+                  </button>
+                </div>
               </div>
-            </div>
-          </Container>
-        </div>
+            </Container>
+          </div>
+        )}
 
         {/* Main bar */}
         <div
@@ -183,7 +217,10 @@ export default function Header() {
 
                       <div
                         className={cn(
-                          "absolute left-1/2 top-full w-[27rem] -translate-x-1/2 pt-4 transition-all duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                          // Left-anchored, not centred: "Services" sits near the
+                          // viewport edge, so a centred panel hangs off-screen
+                          // and clips its own icon column.
+                          "absolute left-0 top-full w-[27rem] pt-4 transition-all duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]",
                           servicesOpen
                             ? "visible translate-y-0 opacity-100"
                             : "invisible -translate-y-1 opacity-0",
@@ -392,8 +429,15 @@ export default function Header() {
       </header>
 
       {/* Spacer for the fixed header. Must equal the *unscrolled* bar heights:
-          mobile 64px; desktop 40 (utility) + 80 (main) = 120px. */}
-      <div aria-hidden className="h-16 lg:h-[7.5rem]" />
+          mobile 64px; desktop 40 (utility) + 80 (main) = 120px — or just the
+          80px bar once the strip is dismissed. The same numbers are duplicated
+          in the html[data-strip="off"] rules in globals.css, which cover the
+          frames before hydration; change one, change both. */}
+      <div
+        data-header-spacer
+        aria-hidden
+        className={cn("h-16", stripDismissed ? "lg:h-20" : "lg:h-[7.5rem]")}
+      />
     </>
   );
 }

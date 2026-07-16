@@ -52,6 +52,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} ${inter.variable} h-full`}>
       <body className="min-h-full flex flex-col bg-canvas text-ink">
+        {/* Reinstates a dismissed utility strip *before* first paint. React can't
+            do this: reading localStorage during render would make the client's
+            first render disagree with the server's and blow up hydration (see
+            CLAUDE.md §11). So the pre-paint state is CSS, driven by this flag,
+            and Header owns it from hydration onward. Both must agree — see the
+            html[data-strip="off"] rules in globals.css. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem("rimaya:strip")==="off"){document.documentElement.dataset.strip="off"}}catch(e){}`,
+          }}
+        />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

@@ -1,4 +1,4 @@
-import { Clock } from "lucide-react";
+import { Clock, ArrowRight } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import Reveal from "@/components/ui/Reveal";
@@ -56,12 +56,26 @@ export default function CTASection({
               <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/75 sm:text-lg">
                 {intro}
               </p>
+              {/* On navy, white is the loudest thing available — so white is the
+                  primary. `action` blue sat only a shade off this band and read
+                  as disabled, while the white secondary next to it outshouted
+                  the button that actually matters. The glow is what keeps the
+                  white button from looking like a flat sticker. */}
               <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Button href={primaryHref} size="lg" variant="primary">
+                <Button
+                  href={primaryHref}
+                  size="lg"
+                  variant="onDark"
+                  className="group/cta shadow-[0_10px_40px_-8px_rgba(255,255,255,0.45)]"
+                >
                   {primaryLabel}
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform duration-200 group-hover/cta:translate-x-0.5"
+                    aria-hidden
+                  />
                 </Button>
                 {secondaryLabel && secondaryHref && (
-                  <Button href={secondaryHref} size="lg" variant="onDark">
+                  <Button href={secondaryHref} size="lg" variant="outlineOnDark">
                     {secondaryLabel}
                   </Button>
                 )}
