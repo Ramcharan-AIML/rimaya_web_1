@@ -1,1 +1,266 @@
 @AGENTS.md
+
+# Rimaya — Project Guide
+
+> Lead-generation website for **Rimaya** (UK): **Payroll · Recruitment · Consulting**.
+> This file is the single source of truth for how this project is built and why.
+
+---
+
+## 1. What this project is
+
+**This website is a lead-generation engine, not a brochure.** Every decision — layout,
+copy, component — is judged against one question: *does this help convert a stranger
+into a lead?*
+
+There are **two audiences and two conversions**:
+
+| Audience | Need | Conversion |
+| --- | --- | --- |
+| **Businesses** | Payroll / Recruitment / Consulting | **"Get a Quote"** |
+| **Candidates** | A job | **"Apply + upload CV"** |
+
+The candidate funnel feeds the business funnel: every CV uploaded grows the talent
+database, which strengthens the recruitment pitch to employers. It is a business
+asset, not a side feature.
+
+**Service hierarchy (reflect this everywhere):** Payroll is the **flagship** and gets
+headline weight and visual priority. Recruitment second, Consulting third.
+
+---
+
+## 2. Commands
+
+```bash
+npm run dev      # dev server → http://localhost:3000
+npm run build    # production build (also runs TypeScript checks)
+npm start        # serve the production build
+```
+
+There is **no linter or test suite configured**. Verify work with `npm run build`
+(it type-checks) plus a visual check in the browser.
+
+---
+
+## 3. Stack
+
+- **Next.js 16** (App Router, Turbopack) — ⚠️ see `AGENTS.md`: this version has
+  breaking changes; check `node_modules/next/dist/docs/` before using unfamiliar APIs.
+- **React 19** · **TypeScript** (strict)
+- **Tailwind CSS v4** — CSS-based config via `@theme` in `app/globals.css`.
+  **There is no `tailwind.config.js`.**
+- **Framer Motion** — purposeful animation only
+- **React Hook Form + Zod** — form state + validation
+- **Resend** — email delivery (optional; see §7)
+- **lucide-react** — icons
+
+---
+
+## 4. Design system (locked)
+
+Defined in [`app/globals.css`](app/globals.css) under `@theme`.
+
+### Colours
+| Token | Hex | Use |
+| --- | --- | --- |
+| `brand` | `#005597` | Deep blue — headings, nav, footer, dark bands, structure |
+| `action` | `#006dc1` | Bright blue — **buttons/clickable things ONLY** |
+| `action-hover` | `#00559a` | Button hover |
+| `canvas` | `#ffffff` | Main background |
+| `surface` | `#f8fafc` | Alternating sections |
+| `surface-blue` | `#f0f6ff` | Soft blue bands |
+| `ink` | `#0f172a` | Body text |
+| `muted` | `#475569` | Captions |
+| `hairline` | `#e2e8f0` | 1px borders |
+
+**Hard rules:**
+1. **`action` blue is reserved for things you click.** Never decorative. One bright
+   button on a white/navy screen is magnetic; bright blue everywhere kills its meaning.
+2. **Sharp 90° corners everywhere** — enforced globally via `* { border-radius: 0 }`.
+   Never add `rounded-*` classes.
+3. **60/30/10** — ~60% white/surface, ~30% deep blue + neutrals, ~10% action blue.
+4. Contrast is verified: white on `#006dc1` = 5.31:1 (AA), on `#005597` = 7.65:1 (AAA).
+   **Blue text on white must use `#005597`**, never `#006dc1` at small sizes.
+
+### Backgrounds (Azure-inspired)
+White base + soft light-blue gradient washes; **never two identical backgrounds
+touching**. Helper classes in `globals.css`:
+- `.bg-hero-wash` — hero gradient (pair with the `background_texture.png` image layer)
+- `.bg-soft-blue` — soft blue band
+- `.bg-brand-band` — **dark navy band** (footer, CTA sections). Self-contained: grid
+  texture + glow + gradient + solid navy fallback in ONE background stack.
+  ⚠️ **Do not add `.bg-grid` alongside it** — a second `background-image` rule
+  overrides the gradient and the band renders white.
+
+### Typography
+**Geist** (headings, `--font-heading`) + **Inter** (body, `--font-sans`), via `next/font`.
+⚠️ Headings intentionally have **no fixed colour** so they inherit context — dark on
+light sections, white on navy bands. Don't add `color` to the global `h1–h5` rule.
+
+### Motion
+`components/ui/Reveal.tsx` — fade + 16px rise, once, on scroll-in (150–300ms range,
+ease-out). Rules:
+- Hover states use colour/shadow only — **never** scale transforms (layout shift).
+- ⚠️ **`Reveal` must never branch its DOM on `useReducedMotion()`** — that causes an
+  SSR/CSR hydration mismatch. Reduced motion is handled purely in CSS via the
+  `[data-reveal] { opacity: 1 !important }` override in `globals.css`.
+
+---
+
+## 5. Architecture
+
+```
+app/
+  layout.tsx              Root: fonts, metadata, Header/Footer/WhatsApp/BackToTop
+  page.tsx                Home — the conversion spine (+ Organization schema)
+  payroll/                Flagship service page (deepest)
+  recruitment/            Service pitch → leads into jobs
+  consulting/             Service page  ⚠️ placeholder content
+  jobs/                   Job board (filterable, landscape rows)
+    [slug]/               Job detail + apply form (+ JobPosting schema, SSG)
+  submit-cv/              Speculative CV → talent pool. The ONE destination for
+                          every "Submit / Send your CV" CTA (they all used to
+                          point at /jobs, which answered a different question).
+  about/ contact/         Trust + lead capture
+  api/apply/route.ts      Application + CV upload → email
+  api/contact/route.ts    Enquiry → email
+  sitemap.ts robots.ts not-found.tsx
+
+components/
+  layout/    Header (centered-logo nav), Footer, WhatsAppButton, BackToTop
+  home/      Hero, TrustStrip, ServicePillars, WhyRimaya, CandidateBand, Testimonials
+  sections/  PageHero, FeatureCards, CTASection   ← reusable across pages
+  jobs/      JobCard, JobsExplorer (client filters), ApplicationForm (client)
+  contact/   ContactForm (client, reads ?intent=)
+  ui/        Button, Container, Logo, Reveal, SectionHeading, SocialIcons
+
+lib/
+  site.ts    Company details, nav, services   ⚠️ contains TODO placeholders
+  jobs.ts    Typed job data (drives board + teaser + detail pages)
+  email.ts   Email delivery + HTML escaping
+  utils.ts   cn() class helper
+```
+
+### The homepage conversion spine (order is deliberate)
+1. **Header** — CTA always one click away
+2. **Hero** — the fork in the road; both audiences self-select (payroll-led)
+3. **Trust strip** — proof within 5 seconds
+4. **Service pillars** — route to need (Payroll visually prioritised)
+5. **Why Rimaya** — handle the "why you?" objection
+6. **Candidate band** — feed the CV database (live jobs)
+7. **Testimonials** — peer proof once warm
+8. **Final CTA** — catch everyone who didn't click
+9. **Footer** — utility + real UK address as trust signal
+
+**Every service page follows the same rhythm:** intro → what's included → why Rimaya → CTA.
+**No page ends without a CTA.**
+
+---
+
+## 6. Content management
+
+- **Jobs** → edit [`lib/jobs.ts`](lib/jobs.ts). One typed array drives the board, the
+  homepage teaser, and each detail page (which are statically generated). Add/remove
+  objects only. Upgrade path: swap for a CMS/DB behind the same types.
+- **Company details** → edit [`lib/site.ts`](lib/site.ts).
+
+---
+
+## 7. Forms & email
+
+Both routes validate **server-side**, use a **honeypot** (`company` field) for spam,
+and return clear errors.
+
+- `POST /api/apply` — multipart. CV: PDF/DOC/DOCX, **max 5MB**, type+size checked on
+  the server. Emails the recruiter **with the CV attached**. Serves both the job
+  apply form and `/submit-cv` (`ApplicationForm` has a `speculative` prop —
+  same payload, different labels).
+- `POST /api/contact` — JSON enquiry. Carries optional qualifying fields
+  (`organisation`, `phone`, `headcount`) so an enquiry arrives priceable.
+  ⚠️ The **honeypot owns the field name `company`** — the real company field is
+  `organisation`. Don't rename either without changing both sides.
+
+**Without `RESEND_API_KEY`, submissions are logged to the server console** so the flow
+works in development. With a key, they email `RIMAYA_INBOX`. Copy `.env.example` →
+`.env.local`. A lead that goes nowhere is lost business — never break delivery.
+
+---
+
+## 8. Images
+
+Source files in `Images/`, served copies in `public/images/`. Always use `next/image`.
+
+| File | Placed in |
+| --- | --- |
+| `Logo-1_1.png` + `Logo-1_2.png` | `components/ui/Logo.tsx` — R-mark + wordmark, side by side |
+| `rimaya-hero-office.png` | Homepage hero |
+| `payroll.png` | Payroll page (branded Rimaya dashboard) |
+| `recruitment.png` | Recruitment page ("Our approach") |
+| `about_team.png` | About page ("Our story") |
+| `background_texture.png` | Hero + PageHero wash layer |
+
+⚠️ The logos are **deep blue** — great on white, low contrast on navy. On dark bands
+use `<Logo variant="light" />` (R-mark on a white tile + white text wordmark).
+
+---
+
+## 9. SEO & accessibility (already wired — keep it)
+
+- Per-page `metadata` via the Next metadata API (never manual `<head>` tags).
+- Structured data: **Organization** (home), **JobPosting** (job detail).
+- `sitemap.ts` + `robots.ts` — driven by `lib/site.ts` `url`.
+- Semantic HTML, labelled form fields, visible focus rings, 44px touch targets,
+  alt text on meaningful images (decorative images use `alt="" aria-hidden`).
+- Mobile is the **primary** case — most leads arrive on mobile.
+
+---
+
+## 10. ⚠️ Placeholders — replace before launch
+
+Search for `TODO` and `NOTE`.
+
+| What | Where | Priority |
+| --- | --- | --- |
+| **Consulting content** (what the service actually covers) | `app/consulting/page.tsx` | 🔴 Blocking |
+| Contact details (phone, email, address, company/VAT no., WhatsApp, socials) | `lib/site.ts` | 🔴 |
+| Final domain (breaks SEO/sitemap if wrong) | `lib/site.ts` → `url` | 🔴 |
+| Recruitment stats (500+, 1,000+ etc.) | `app/recruitment/page.tsx` | 🟠 |
+| Testimonials (must be real & approved) | `components/home/Testimonials.tsx` | 🟠 |
+| Job listings | `lib/jobs.ts` | 🟠 |
+| Payroll scope — confirm full B2B bureau vs narrower | `app/payroll/page.tsx` | 🟠 |
+
+**Open decisions:** hero CTA balance (business primary — flip if candidates are the
+bigger volume play); job-board backend (email-only vs email + submissions dashboard).
+
+---
+
+## 11. Gotchas learned the hard way
+
+1. **`lucide-react` removed brand icons** (`Linkedin`, `Instagram`, etc.) — use the
+   inline SVGs in `components/ui/SocialIcons.tsx`. Verify an icon exists before use:
+   `node -e "console.log('Star' in require('lucide-react'))"`.
+2. **`.bg-brand-band` + `.bg-grid` together = white band.** See §4.
+3. **Global heading colour breaks dark bands.** See §4.
+4. **`Reveal` + `useReducedMotion` DOM branch = hydration error.** See §4.
+5. **`create-next-app` rejects non-allowlisted dirs** — `Images/` had to be moved out
+   during scaffold (relevant only if re-scaffolding).
+6. **Windows:** the `ui-ux-pro-max` skill's Python scripts need
+   `PYTHONUTF8=1 PYTHONIOENCODING=utf-8`, and `python` (not `python3`).
+
+### Verifying visually
+Screenshots via Playwright driving system Edge/Chrome (`channel: "msedge"`, no browser
+download). **Use `reducedMotion: "reduce"`** in the context — otherwise `whileInView`
+content below the fold is captured at `opacity: 0` and pages look empty.
+
+---
+
+## 12. Planning docs
+
+Full reasoning lives in [`docs/`](docs/):
+- `rimaya-build-brief.md` — original client brief
+- `rimaya-storytelling-architecture.md` — story, journey map, page-by-page structure
+- `rimaya-design-system.md` — visual spec
+- `rimaya-homepage-summary.md` — one-page stakeholder overview
+
+⚠️ **The build brief §9 specifies a "Navy & Emerald on Bone" palette. That is
+superseded** — the client changed direction to `#005597` + `#006dc1` + white (§4).

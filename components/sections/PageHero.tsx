@@ -1,0 +1,79 @@
+import Link from "next/link";
+import Image from "next/image";
+import { ChevronRight } from "lucide-react";
+import Container from "@/components/ui/Container";
+import Button from "@/components/ui/Button";
+import Reveal from "@/components/ui/Reveal";
+import { Eyebrow } from "@/components/ui/SectionHeading";
+
+export default function PageHero({
+  eyebrow,
+  title,
+  intro,
+  breadcrumb,
+  primary,
+  secondary,
+}: {
+  eyebrow: string;
+  title: React.ReactNode;
+  intro: string;
+  breadcrumb: string;
+  primary?: { label: string; href: string };
+  secondary?: { label: string; href: string };
+}) {
+  return (
+    <section className="relative isolate overflow-hidden bg-hero-wash border-b border-hairline">
+      {/* Soft blue texture wash */}
+      <Image
+        src="/images/background_texture.png"
+        alt=""
+        aria-hidden
+        fill
+        sizes="100vw"
+        className="-z-10 object-cover opacity-70"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-gradient-to-r from-white via-white/70 to-transparent"
+      />
+      <Container className="relative py-14 sm:py-20">
+        <nav className="mb-6 flex items-center gap-1.5 text-xs text-muted">
+          <Link href="/" className="hover:text-action">
+            Home
+          </Link>
+          <ChevronRight className="h-3.5 w-3.5" />
+          <span className="text-ink">{breadcrumb}</span>
+        </nav>
+
+        <Reveal>
+          <Eyebrow>{eyebrow}</Eyebrow>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight text-ink sm:text-5xl">
+            {title}
+          </h1>
+        </Reveal>
+        <Reveal delay={0.16}>
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
+            {intro}
+          </p>
+        </Reveal>
+
+        {(primary || secondary) && (
+          <Reveal delay={0.24} className="mt-8 flex flex-col gap-3 sm:flex-row">
+            {primary && (
+              <Button href={primary.href} size="lg">
+                {primary.label}
+              </Button>
+            )}
+            {secondary && (
+              <Button href={secondary.href} size="lg" variant="secondary">
+                {secondary.label}
+              </Button>
+            )}
+          </Reveal>
+        )}
+      </Container>
+    </section>
+  );
+}

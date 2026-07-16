@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rimaya — Website
 
-## Getting Started
+Lead-generation website for **Rimaya** (Payroll · Recruitment · Consulting).
+Built with **Next.js (App Router) + TypeScript + Tailwind CSS v4 + Framer Motion**.
 
-First, run the development server:
+Design and strategy live in [`docs/`](docs/):
+- `rimaya-storytelling-architecture.md` — the story, journey, page-by-page structure
+- `rimaya-design-system.md` — colours, backgrounds, typography, components
+- `rimaya-homepage-summary.md` — one-page overview (for stakeholders)
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
+npm start        # serve the production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment (email delivery)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `.env.example` to `.env.local` and fill in the values. Without a
+`RESEND_API_KEY`, contact + job-application submissions are **logged to the
+server console** so the flow works in development. With a key, they are emailed
+to `RIMAYA_INBOX` (job applications include the CV as an attachment).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Design system
 
-## Learn More
+Colours, fonts, and layout tokens are defined in [`app/globals.css`](app/globals.css):
+- `--color-brand` `#005597` (deep blue — structure/trust)
+- `--color-action` `#006dc1` (bright blue — buttons/clickable only)
+- Sharp 90° corners everywhere (`* { border-radius: 0 }`)
+- Fonts: Geist (headings) + Inter (body)
 
-To learn more about Next.js, take a look at the following resources:
+## Managing content
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Jobs:** edit [`lib/jobs.ts`](lib/jobs.ts) — a typed array drives the job board,
+  the homepage teaser, and each job detail page. Add/remove objects; no other
+  changes needed. (Upgrade path: swap this file for a CMS/DB later.)
+- **Company details:** edit [`lib/site.ts`](lib/site.ts) — name, contact, address,
+  socials, credentials. Values marked `// TODO` are placeholders.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ⚠️ Placeholders to replace before launch
 
-## Deploy on Vercel
+Search the code for `TODO` and `NOTE`. Key items:
+- Real contact details in `lib/site.ts` (phone, email, address, company/VAT no., WhatsApp, socials).
+- Real **Consulting** content in `app/consulting/page.tsx` (currently sensible placeholder copy).
+- Real recruitment **stats** in `app/recruitment/page.tsx`.
+- Real **testimonials** in `components/home/Testimonials.tsx`.
+- Real **job listings** in `lib/jobs.ts`.
+- Confirm the final **domain** in `lib/site.ts` (`url`) for SEO/sitemap.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Routes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`/` · `/payroll` · `/recruitment` · `/consulting` · `/jobs` · `/jobs/[slug]`
+· `/about` · `/contact` · `/api/contact` · `/api/apply` · `/sitemap.xml` · `/robots.txt`

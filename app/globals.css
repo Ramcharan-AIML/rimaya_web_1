@@ -1,26 +1,304 @@
 @import "tailwindcss";
 
+/* ============================================================
+   RIMAYA DESIGN TOKENS
+   Palette: #005597 (brand/deep) · #006dc1 (action/bright) · white
+   Neutrals from ui-ux-pro-max B2B palette. Sharp corners everywhere.
+   ============================================================ */
+
+@theme {
+  /* Brand blues */
+  --color-brand: #005597;
+  --color-brand-dark: #00426f;
+  --color-brand-light: #1f6fae;
+  --color-action: #006dc1;
+  --color-action-hover: #00559a;
+
+  /* Surfaces */
+  --color-canvas: #ffffff;
+  --color-surface: #f8fafc;
+  --color-surface-blue: #f0f6ff;
+
+  /* Confirmation green. Used ONLY for "yes, you get this" marks — the capability
+     ticks on the service cards. It is not a second brand colour: give it any
+     more surface area and it starts competing with `action` for the eye. */
+  --color-signal: #16a34a;
+
+  /* Its opposite number: the "this is what you're living with" marks in the
+     before/after comparison. Same rule — marks only, never a surface. */
+  --color-danger: #dc2626;
+
+  /* Text + structure */
+  --color-ink: #0f172a;
+  --color-muted: #475569;
+  --color-hairline: #e2e8f0;
+
+  /* Fonts (wired in layout.tsx) */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-geist), var(--font-inter), ui-sans-serif, sans-serif;
+
+  /* Motion */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ------------------------------------------------------------
+   Base
+   ------------------------------------------------------------ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  border-radius: 0; /* SHARP CORNERS — brand signature */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+  /* No fixed colour — inherit from context so headings are dark on light
+     sections (body is ink) and white on dark bands (parent sets text-white). */
+}
+
+/* Selection */
+::selection {
+  background: var(--color-action);
+  color: #fff;
+}
+
+/* Visible focus for keyboard users */
+:focus-visible {
+  outline: 2px solid var(--color-action);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------
+   Azure-inspired background washes
+   ------------------------------------------------------------ */
+.bg-hero-wash {
+  background:
+    radial-gradient(55% 75% at 72% 18%, rgba(0, 109, 193, 0.12), transparent 60%),
+    radial-gradient(45% 60% at 12% 90%, rgba(0, 85, 151, 0.08), transparent 60%),
+    linear-gradient(165deg, #ffffff 0%, #f2f7ff 52%, #e9f1fc 100%);
+}
+
+.bg-soft-blue {
+  background:
+    radial-gradient(40% 70% at 85% 10%, rgba(0, 109, 193, 0.06), transparent 60%),
+    linear-gradient(180deg, #f6faff 0%, #eef5ff 100%);
+}
+
+/* Azure-style pastel washes — a white base lit by wide, very low-saturation
+   blooms (lavender / cyan / mint), per the Azure product pages the client
+   pointed at.
+   ⚠️ Keep every bloom under ~0.2 alpha. These are *light*, not brand colours:
+   push the saturation up and they start competing with `action` blue, which
+   must stay the only thing on the page that shouts. They are also strictly
+   backgrounds — never tint text, borders, or icons with these hues. */
+.bg-azure-wash {
+  background-color: #ffffff;
+  background-image:
+    radial-gradient(38% 55% at 2% 0%, rgba(167, 139, 250, 0.16), transparent 62%),
+    radial-gradient(42% 60% at 100% 20%, rgba(56, 189, 248, 0.14), transparent 60%),
+    radial-gradient(45% 55% at 88% 100%, rgba(45, 212, 191, 0.1), transparent 62%),
+    linear-gradient(170deg, #fbfdff 0%, #f4fafe 55%, #eef8fc 100%);
+}
+
+/* The mint/aqua end of the same family — cooler and a touch deeper, for a band
+   that has to hold its own between two navy sections. */
+.bg-azure-mint {
+  background-color: #f2fbfa;
+  background-image:
+    radial-gradient(52% 62% at 10% 100%, rgba(45, 212, 191, 0.2), transparent 62%),
+    radial-gradient(45% 55% at 94% 6%, rgba(56, 189, 248, 0.16), transparent 60%),
+    radial-gradient(40% 50% at 72% 100%, rgba(129, 140, 248, 0.12), transparent 62%),
+    linear-gradient(180deg, #f8fdfd 0%, #ecfaf8 58%, #e6f6f8 100%);
+}
+
+/* Dark navy band — a deep, clean gradient with a single soft glow. Deliberately
+   untextured: the grid overlay that used to live here fought every card and
+   headline placed on top of it and read as noise, not craft. Depth now comes
+   from the gradient and the glow alone. Solid fallback first so nothing can
+   override the navy fill. */
+.bg-brand-band {
+  background-color: #00426f;
+  background-image:
+    radial-gradient(58% 100% at 80% 0%, rgba(0, 122, 214, 0.38), transparent 64%),
+    radial-gradient(45% 80% at 10% 100%, rgba(0, 40, 72, 0.5), transparent 60%),
+    linear-gradient(155deg, #013e69 0%, #005597 58%, #0061ad 100%);
+}
+
+/* Scrim over the 3D showcase art: knocks the artwork back far enough for dark
+   text to hold contrast, with a stronger white pool under the top-left where
+   the heading sits.
+   The gradient resolves to *solid white* at the bottom so the artwork dissolves
+   into the next section instead of stopping at a visible seam — the two
+   sections read as one continuous surface. Anything that follows must therefore
+   start white. */
+.bg-showcase-scrim {
+  background-image:
+    radial-gradient(65% 65% at 22% 12%, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.4) 70%, transparent 100%),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.72) 0%,
+      rgba(255, 255, 255, 0.5) 40%,
+      rgba(255, 255, 255, 0.86) 82%,
+      #ffffff 100%
+    );
+}
+
+/* ------------------------------------------------------------
+   Utilities
+   ------------------------------------------------------------ */
+.hairline {
+  border: 1px solid var(--color-hairline);
+}
+
+.card-shadow {
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -12px rgba(15, 23, 42, 0.12);
+}
+
+.card-shadow-hover {
+  box-shadow: 0 4px 12px -2px rgba(0, 85, 151, 0.12), 0 18px 40px -16px rgba(0, 85, 151, 0.22);
+}
+
+/* Entrance animation (JS-independent fallback handled by Framer where used) */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ------------------------------------------------------------
+   Hover border beam — a light travelling the full edge of a card.
+   A conic gradient is rotated behind the card and masked down to a 1.5px ring
+   (paint the padding-box, punch out the content-box), so only the border-line
+   itself lights up. Pure CSS: no JS, no layout shift, GPU-cheap.
+   Needs @property for the angle to be animatable; where it is unsupported the
+   beam simply never appears and the card's own border still reads.
+   ------------------------------------------------------------ */
+@property --beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.card-beam::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0deg,
+    transparent 240deg,
+    rgba(120, 200, 255, 0.5) 290deg,
+    rgba(255, 255, 255, 0.95) 330deg,
+    rgba(120, 200, 255, 0.5) 350deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms var(--ease-out-soft);
+}
+
+/* Both forms on purpose: the card is usually its own `group` (self selectors),
+   but the beam may also sit on a child of a larger hover target (descendant). */
+.card-beam:hover::after,
+.card-beam:focus-within::after,
+.group:hover .card-beam::after,
+.group:focus-within .card-beam::after {
+  opacity: 1;
+  animation: beam-orbit 2.4s linear infinite;
+}
+
+@keyframes beam-orbit {
+  to { --beam-angle: 360deg; }
+}
+
+/* ------------------------------------------------------------
+   Marquee — a row that scrolls forever and pauses under the cursor.
+   The track holds the item list TWICE; translating it exactly -50% lands copy 2
+   precisely where copy 1 began, so the loop has no seam. That only holds if
+   every item contributes identical width, which is why spacing lives on the
+   items (margin-right) and NOT as `gap` on the track — a gap is one short at
+   the wrap point and the row drifts.
+   ------------------------------------------------------------ */
+.marquee {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 60s linear infinite;
+}
+
+.marquee-track--reverse {
+  animation-name: marquee-right;
+}
+
+/* Pause on hover, and on keyboard focus inside the row — a caret parked in a
+   moving quote is unusable. */
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  /* The global rule below would collapse the marquee to a 0.001ms animation,
+     snapping it to its end position. Stop it cleanly at the start instead and
+     let the row be scrolled by hand. */
+  .marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+  .marquee {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  /* Force scroll-reveal content fully visible (beats Framer inline opacity) */
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
