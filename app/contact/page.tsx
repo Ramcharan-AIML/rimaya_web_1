@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
-  Mail,
-  Phone,
   MapPin,
   Clock,
-  MessageCircle,
-  ArrowRight,
   BadgeCheck,
   CalendarCheck,
   ShieldCheck,
@@ -27,50 +23,19 @@ export const metadata: Metadata = {
 
 /**
  * The page most visitors judge us on, and the last step before a lead exists.
- * Three deliberate moves:
+ * Two deliberate moves:
  *
- * 1. Channels first. Someone ready to talk should never have to scroll past a
- *    form to find the phone number — the form is for people who want to think.
- * 2. The form asks quote-shaped questions, so an enquiry arrives priceable.
- * 3. "What happens next" + credentials answer the two silent objections
+ * 1. The form asks quote-shaped questions, so an enquiry arrives priceable.
+ * 2. "What happens next" + credentials answer the two silent objections
  *    ("will anyone actually reply?", "are these people real?") right beside the
- *    submit button, where the hesitation happens.
+ *    submit button, where the hesitation happens. The office line, address, and
+ *    WhatsApp (via the FAQ) remain for anyone who'd rather talk than type.
  */
 
 export default function ContactPage() {
   const whatsappHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(
     "Hi Rimaya, I'd like to talk about your services.",
   )}`;
-
-  const channels = [
-    {
-      icon: Phone,
-      label: "Call us",
-      value: site.phone,
-      href: site.phoneHref,
-      note: "Straight through to a person, not a menu.",
-      cta: "Call now",
-      external: false,
-    },
-    {
-      icon: MessageCircle,
-      label: "WhatsApp",
-      value: "Message us",
-      href: whatsappHref,
-      note: "The fastest way to get a quick answer.",
-      cta: "Open WhatsApp",
-      external: true,
-    },
-    {
-      icon: Mail,
-      label: "Email",
-      value: site.email,
-      href: `mailto:${site.email}`,
-      note: site.responsePromise + ", usually sooner.",
-      cta: "Send an email",
-      external: false,
-    },
-  ];
 
   const steps = [
     {
@@ -102,46 +67,6 @@ export default function ContactPage() {
         intro="Tell us what you need — payroll, people, or advice — and we'll come straight back to you with a real answer. No jargon, no pressure, no sales calls."
       />
 
-      {/* Channels — for anyone already decided. */}
-      <section className="bg-white py-14 sm:py-16">
-        <Container>
-          <div className="grid gap-5 md:grid-cols-3">
-            {channels.map(({ icon: Icon, label, value, href, note, cta, external }, i) => (
-              <Reveal key={label} delay={i * 0.08}>
-                <a
-                  href={href}
-                  {...(external
-                    ? { target: "_blank", rel: "noopener noreferrer" }
-                    : {})}
-                  className="group relative flex h-full flex-col overflow-hidden border border-hairline bg-white p-7 transition-shadow duration-200 hover:card-shadow-hover"
-                >
-                  <span
-                    aria-hidden
-                    className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-action transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100"
-                  />
-                  <span className="inline-flex h-12 w-12 items-center justify-center bg-brand text-white">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                    {label}
-                  </p>
-                  <p className="mt-1.5 text-lg font-semibold text-ink transition-colors group-hover:text-action">
-                    {value}
-                  </p>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
-                    {note}
-                  </p>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-action">
-                    {cta}
-                    <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-                  </span>
-                </a>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
-
       {/* Form + reassurance */}
       <section className="border-y border-hairline bg-soft-blue py-16 sm:py-20">
         <Container>
@@ -150,7 +75,7 @@ export default function ContactPage() {
             <Reveal>
               <div className="border border-hairline bg-white p-6 card-shadow sm:p-9">
                 <h2 className="text-2xl font-semibold text-ink sm:text-3xl">
-                  Get a quote
+                  Contact Us
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   Answer what you can — only your name, email, and a message are
@@ -168,14 +93,14 @@ export default function ContactPage() {
             {/* Sidebar */}
             <Reveal delay={0.1} className="space-y-5">
               {/* What happens next — kills the "will anyone reply?" doubt. */}
-              <div className="border border-hairline bg-white p-7">
+              {/* <div className="border border-hairline bg-white p-7">
                 <h3 className="text-lg font-semibold text-ink">
                   What happens next
                 </h3>
                 <ol className="mt-6 space-y-6">
                   {steps.map((s, i) => (
                     <li key={s.title} className="relative flex gap-4">
-                      {/* Connector — every step but the last. */}
+                      Connector — every step but the last.
                       {i < steps.length - 1 && (
                         <span
                           aria-hidden
@@ -194,10 +119,10 @@ export default function ContactPage() {
                     </li>
                   ))}
                 </ol>
-              </div>
+              </div> */}
 
               {/* Response promise — the single most reassuring fact we have. */}
-              <div className="flex items-start gap-3.5 border border-action/25 bg-action/5 p-6">
+              {/* <div className="flex items-start gap-3.5 border border-action/25 bg-action/5 p-6">
                 <Clock className="mt-0.5 h-5 w-5 shrink-0 text-action" />
                 <div>
                   <p className="text-sm font-semibold text-ink">
@@ -207,7 +132,7 @@ export default function ContactPage() {
                     Usually much sooner. You&apos;re not joining a ticket queue.
                   </p>
                 </div>
-              </div>
+              </div> */}
 
               {/* A real address is a trust signal — show it, don't bury it. */}
               <div className="border border-hairline bg-white p-7">
@@ -226,7 +151,7 @@ export default function ContactPage() {
                       </p>
                     </div>
                   </li>
-                  <li className="flex items-start gap-3">
+                  {/* <li className="flex items-start gap-3">
                     <Building2 className="mt-0.5 h-5 w-5 shrink-0 text-brand" />
                     <div>
                       <p className="font-medium text-ink">Office line</p>
@@ -237,7 +162,7 @@ export default function ContactPage() {
                         {site.officePhone}
                       </a>
                     </div>
-                  </li>
+                  </li> */}
                   <li className="flex items-start gap-3">
                     <Clock className="mt-0.5 h-5 w-5 shrink-0 text-brand" />
                     <div>

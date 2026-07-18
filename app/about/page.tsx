@@ -18,7 +18,10 @@ import Reveal from "@/components/ui/Reveal";
 import { SectionHeading, Eyebrow } from "@/components/ui/SectionHeading";
 import PageHero from "@/components/sections/PageHero";
 import CTASection from "@/components/sections/CTASection";
+import StatBand from "@/components/sections/StatBand";
+import TestimonialsCarousel from "@/components/home/TestimonialsCarousel";
 import { site } from "@/lib/site";
+import { testimonials } from "@/lib/testimonials";
 
 export const metadata: Metadata = {
   title: "About",
@@ -35,7 +38,6 @@ export const metadata: Metadata = {
 
 const proof = [
   { value: site.credentials.established, label: "Trading since" },
-  { value: "12h", label: "Response promise" },
   { value: `${site.credentials.rating}★`, label: "Client rating" },
   { value: "A-rated", label: "Sponsor licence" },
 ];
@@ -104,20 +106,7 @@ export default function AboutPage() {
       />
 
       {/* Proof band — facts before claims. */}
-      <section className="bg-brand-band py-14 text-white sm:py-16">
-        <Container>
-          <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-            {proof.map((p, i) => (
-              <Reveal key={p.label} delay={i * 0.06}>
-                <div className="border-l border-white/20 pl-5">
-                  <p className="text-4xl font-semibold sm:text-5xl">{p.value}</p>
-                  <p className="mt-2 text-sm text-white/70">{p.label}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
+      <StatBand stats={proof} />
 
       {/* Story */}
       <section className="bg-white py-20 sm:py-24">
@@ -259,6 +248,26 @@ export default function AboutPage() {
             </Reveal>
           </div>
         </Container>
+      </section>
+
+      {/* Social proof — the same shared list the homepage carousel uses. */}
+      <section className="overflow-hidden border-t border-hairline bg-surface py-20 sm:py-24">
+        <Container>
+          <SectionHeading
+            eyebrow="Social proof"
+            title="What clients say about working with us."
+            intro="Real feedback from the businesses that rely on Rimaya day to day."
+            align="center"
+          />
+        </Container>
+        <Reveal className="mt-12">
+          <Container className="relative">
+            <TestimonialsCarousel items={testimonials} />
+            <p className="mt-8 text-center text-xs text-muted">
+              Swipe, or use the arrows, to see more.
+            </p>
+          </Container>
+        </Reveal>
       </section>
 
       <CTASection

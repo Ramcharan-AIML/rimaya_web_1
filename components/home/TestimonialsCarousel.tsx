@@ -2,12 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react";
+import type { Testimonial } from "@/lib/testimonials";
 
-export type Testimonial = {
-  quote: string;
-  name: string;
-  company: string;
-};
+export type { Testimonial };
 
 // Gap between cards, in px — kept here because the arrow step needs the exact
 // value and Tailwind's `gap-6` is 1.5rem = 24px.
@@ -165,8 +162,8 @@ export default function TestimonialsCarousel({
         // across engines; swipe/scroll still work.
         className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth py-2 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {items.map((t) => (
-          <TestimonialCard key={t.name} t={t} />
+        {items.map((t, i) => (
+          <TestimonialCard key={`${t.name}-${i}`} t={t} />
         ))}
       </div>
     </div>

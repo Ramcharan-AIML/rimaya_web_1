@@ -228,8 +228,16 @@ export default function Header() {
                 )}
               </nav>
 
-              {/* CTA — right rail */}
-              {/* <div className="flex items-center justify-end">
+              {/* CTA — right rail. Balances the logo on the left so the centred
+                  nav sits at the true optical middle of the bar. */}
+              <div className="flex items-center justify-end gap-5">
+                <a
+                  href={`mailto:${site.email}`}
+                  className="hidden items-center gap-2 text-sm font-medium text-ink/75 transition-colors hover:text-brand xl:inline-flex"
+                >
+                  <Mail className="h-4 w-4 text-action" aria-hidden />
+                  {site.email}
+                </a>
                 <Button
                   href="/contact?intent=quote"
                   size="md"
@@ -241,7 +249,7 @@ export default function Header() {
                     aria-hidden
                   />
                 </Button>
-              </div> */}
+              </div>
             </div>
 
             {/* Mobile bar */}
@@ -316,7 +324,7 @@ export default function Header() {
                   ))}
               </ul>
 
-              {/* <div className="pt-6">
+              <div className="pt-6">
                 <Button
                   href="/contact?intent=quote"
                   size="lg"
@@ -326,7 +334,7 @@ export default function Header() {
                   Get a Quote
                   <ArrowRight className="h-4 w-4" aria-hidden />
                 </Button>
-              </div> */}
+              </div>
 
               {/* Same two facts as the desktop strip — they matter most here. */}
               <div className="mt-6 flex flex-col gap-3 border-t border-hairline pt-5">

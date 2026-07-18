@@ -45,8 +45,9 @@ const intentLabels: Record<string, string> = {
 // the site, so arriving from a service page pre-selects the right one.
 const intents = [
   { key: "payroll", label: "Payroll" },
-  { key: "hire", label: "Recruitment" },
   { key: "consulting", label: "Consulting" },
+  { key: "hire", label: "Talent Sourcing" },
+  
   { key: "general", label: "Something else" },
 ] as const;
 

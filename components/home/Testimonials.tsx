@@ -3,32 +3,9 @@ import Reveal from "@/components/ui/Reveal";
 import Button from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { site } from "@/lib/site";
+import { testimonials } from "@/lib/testimonials";
 import TrustpilotWidget from "./TrustpilotWidget";
-import TestimonialsCarousel, { type Testimonial } from "./TestimonialsCarousel";
-
-// NOTE: placeholder testimonials, shown until the live Trustpilot TrustBox is
-// switched on (set businessUnitId + templateId in lib/site.ts). Replace these
-// with the client's real, approved reviews if the widget stays off at launch.
-const testimonials: Testimonial[] = [
-  {
-    quote:
-      "Rimaya took our payroll off our plate completely. Everything runs on time, HMRC is always happy, and their team actually answers the phone.",
-    name: "Operations Director",
-    company: "Professional services firm",
-  },
-  {
-    quote:
-      "We needed temporary staff at short notice and they delivered vetted people within days. The quality of candidates has been consistently strong.",
-    name: "Site Manager",
-    company: "Logistics company",
-  },
-  {
-    quote:
-      "Straightforward, responsive, and genuinely helpful. It feels like having a finance partner rather than just another supplier.",
-    name: "Founder",
-    company: "Growing SME",
-  },
-];
+import TestimonialsCarousel from "./TestimonialsCarousel";
 
 // The section flips to live Trustpilot reviews the moment both IDs are set.
 const trustpilotLive = Boolean(

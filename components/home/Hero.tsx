@@ -1,5 +1,5 @@
 import Image from "next/image";
-import heroBackdrop from "@/public/images/hero_image_back.webp";
+import heroBackdrop from "@/public/images/home_page_background.webp";
 import { ArrowRight, Clock } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";

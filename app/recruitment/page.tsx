@@ -17,6 +17,7 @@ import Reveal from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import PageHero from "@/components/sections/PageHero";
 import FeatureCards from "@/components/sections/FeatureCards";
+import StatBand from "@/components/sections/StatBand";
 import JobCard from "@/components/jobs/JobCard";
 import { jobs } from "@/lib/jobs";
 
@@ -84,18 +85,7 @@ export default function RecruitmentPage() {
       />
 
       {/* Stats */}
-      <section className="bg-brand-band py-14 text-white">
-        <Container>
-          <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-            {stats.map((s) => (
-              <Reveal key={s.label} className="text-center lg:text-left">
-                <p className="text-4xl font-semibold sm:text-5xl">{s.value}</p>
-                <p className="mt-2 text-sm text-white/70">{s.label}</p>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
+      <StatBand stats={stats} />
 
       {/* Partnership band */}
       <section className="bg-white py-20 sm:py-24">
