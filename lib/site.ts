@@ -3,7 +3,7 @@
 
 export const site = {
   name: "Rimaya",
-  descriptor: "Payroll · Recruitment · Consulting",
+  descriptor: "Payroll · Consulting · Talent Sourcing",
   url: "https://rimaya.co.uk", // TODO: confirm final domain
   email: "info@rimaya.co.uk",
   // Mobile — also the WhatsApp line.
@@ -28,7 +28,24 @@ export const site = {
   },
   socials: {
     linkedin: "https://www.linkedin.com/", // TODO
-    instagram: "https://www.instagram.com/", // TODO
+    // instagram: "https://www.instagram.com/", // TODO
+  },
+  trustpilot: {
+    // Public review profile and the "leave a review" flow. These work today —
+    // the evaluate URL is what the "Write a review" button points at.
+    reviewUrl: "https://www.trustpilot.com/review/rimaya.co.uk",
+    writeReviewUrl: "https://www.trustpilot.com/evaluate/rimaya.co.uk",
+    // ⚠️ Fill BOTH to switch the testimonials section over to LIVE Trustpilot
+    // reviews that update automatically as people post them. Get them from a
+    // Trustpilot Business account (Integrations → TrustBox):
+    //   businessUnitId — Business Unit ID for rimaya.co.uk
+    //   templateId     — the TrustBox template you pick (e.g. Carousel/Grid)
+    // While either is empty the section shows the curated testimonials below.
+    businessUnitId: "", // TODO
+    templateId: "", // TODO
+    // Locale + the on-widget height. Safe defaults; adjust to the template.
+    locale: "en-GB",
+    widgetHeight: "500px",
   },
 } as const;
 
@@ -42,15 +59,16 @@ export const services: NavChild[] = [
     blurb: "Accurate, compliant payroll run for you — every time.",
   },
   {
-    label: "Recruitment",
-    href: "/recruitment",
-    blurb: "The right people, placed fast — temporary or permanent.",
-  },
-  {
     label: "Consulting",
     href: "/consulting",
     blurb: "Expert guidance when the decision matters.",
   },
+  {
+    label: "Talent Sourcing",
+    href: "/recruitment",
+    blurb: "The right people, placed fast — temporary or permanent.",
+  },
+  
 ];
 
 export const primaryNav: NavItem[] = [

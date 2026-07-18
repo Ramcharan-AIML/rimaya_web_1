@@ -1,8 +1,10 @@
 import { Star, Quote } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Reveal from "@/components/ui/Reveal";
+import Button from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { cn } from "@/lib/utils";
+import { site } from "@/lib/site";
+import TrustpilotWidget from "./TrustpilotWidget";
 
 type Testimonial = {
   quote: string;
@@ -10,7 +12,9 @@ type Testimonial = {
   company: string;
 };
 
-// NOTE: placeholder testimonials. Replace with the client's real, approved reviews.
+// NOTE: placeholder testimonials, shown until the live Trustpilot TrustBox is
+// switched on (set businessUnitId + templateId in lib/site.ts). Replace these
+// with the client's real, approved reviews if the widget stays off at launch.
 const testimonials: Testimonial[] = [
   {
     quote:
@@ -32,10 +36,19 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-// Two rows travelling in opposite directions. The second row starts from the
-// other end of the list so the two lanes never show the same quote side by side.
-const rowOne = testimonials;
-const rowTwo = [...testimonials].reverse();
+// The section flips to live Trustpilot reviews the moment both IDs are set.
+const trustpilotLive = Boolean(
+  site.trustpilot.businessUnitId && site.trustpilot.templateId,
+);
+
+/** The green Trustpilot star, inline — lucide has no brand marks (CLAUDE.md §11). */
+function TrustpilotStar({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden className={className} fill="#00b67a">
+      <path d="M12 2l2.9 6.26L21.6 9l-4.8 4.5 1.3 6.5L12 16.9 5.9 20l1.3-6.5L2.4 9l6.7-.74L12 2z" />
+    </svg>
+  );
+}
 
 function TestimonialCard({ t }: { t: Testimonial }) {
   return (
@@ -58,20 +71,14 @@ function TestimonialCard({ t }: { t: Testimonial }) {
 }
 
 /**
- * One lane of the marquee. The list is rendered twice: the first copy is the
- * real content, the second is `aria-hidden` scenery that exists purely so the
- * loop can wrap without a gap — a screen reader should hear each quote once.
+ * A single marquee lane. The list is rendered twice: the first copy is the real
+ * content, the second is `aria-hidden` scenery that exists purely so the loop
+ * can wrap without a gap — a screen reader should hear each quote once.
  */
-function MarqueeRow({
-  items,
-  reverse = false,
-}: {
-  items: Testimonial[];
-  reverse?: boolean;
-}) {
+function MarqueeRow({ items }: { items: Testimonial[] }) {
   return (
     <div className="marquee overflow-hidden">
-      <div className={cn("marquee-track", reverse && "marquee-track--reverse")}>
+      <div className="marquee-track">
         {items.map((t) => (
           <TestimonialCard key={t.name} t={t} />
         ))}
@@ -87,8 +94,8 @@ function MarqueeRow({
 
 export default function Testimonials() {
   return (
-    // Full-bleed: the lanes must run edge to edge for the loop to read as
-    // endless, so they sit outside the Container the heading uses.
+    // Full-bleed: the lane must run edge to edge for the loop to read as
+    // endless, so it sits outside the Container the heading uses.
     <section className="overflow-hidden bg-white py-20 sm:py-24">
       <Container>
         <Reveal>
@@ -99,18 +106,47 @@ export default function Testimonials() {
             align="center"
           />
         </Reveal>
+
+        {/* Write-a-review CTA — sits above the reviews so a happy client can add
+            theirs in one click. Opens Trustpilot's review flow in a new tab. */}
+        <Reveal delay={0.05}>
+          <div className="mt-8 flex flex-col items-center gap-3">
+            <Button
+              href={site.trustpilot.writeReviewUrl}
+              variant="secondary"
+              size="md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <TrustpilotStar className="h-5 w-5" />
+              Write a review on Trustpilot
+            </Button>
+            <p className="text-xs text-muted">
+              Share your experience — reviews you post on Trustpilot appear here.
+            </p>
+          </div>
+        </Reveal>
       </Container>
 
-      <Reveal className="mt-12 space-y-6">
-        <MarqueeRow items={rowOne} />
-        <MarqueeRow items={rowTwo} reverse />
-      </Reveal>
-
-      <Container>
-        <p className="mt-10 text-center text-xs text-muted">
-          Hover to pause and read.
-        </p>
-      </Container>
+      {trustpilotLive ? (
+        // Live reviews, updated automatically by Trustpilot.
+        <Container>
+          <Reveal className="mt-12">
+            <TrustpilotWidget />
+          </Reveal>
+        </Container>
+      ) : (
+        <>
+          <Reveal className="mt-12">
+            <MarqueeRow items={testimonials} />
+          </Reveal>
+          <Container>
+            <p className="mt-10 text-center text-xs text-muted">
+              Hover to pause and read.
+            </p>
+          </Container>
+        </>
+      )}
     </section>
   );
 }

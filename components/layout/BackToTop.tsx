@@ -5,11 +5,10 @@ import { ArrowUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
- * Sits directly above the WhatsApp pill as one floating rail.
+ * Floating back-to-top control, bottom-right. Fades in past 600px of scroll.
  *
- * ⚠️ The bottom margin is what keeps the two from colliding: it must clear the
- * WhatsApp pill's height (58px) plus a gap. If that pill's padding or icon tile
- * changes, this number changes with it.
+ * It used to carry a bottom margin to clear the WhatsApp pill that sat below it;
+ * that pill was removed, so it now anchors straight to the corner.
  */
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -30,7 +29,7 @@ export default function BackToTop() {
       aria-hidden={!visible}
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       className={cn(
-        "group fixed bottom-5 right-5 z-30 mb-[4.5rem] inline-flex h-11 w-11 cursor-pointer items-center justify-center border border-hairline bg-white/90 text-brand shadow-[0_8px_24px_-8px_rgba(0,40,72,0.4)] backdrop-blur-md transition-all duration-200 hover:border-brand hover:bg-brand hover:text-white",
+        "group fixed bottom-5 right-5 z-30 inline-flex h-11 w-11 cursor-pointer items-center justify-center border border-hairline bg-white/90 text-brand shadow-[0_8px_24px_-8px_rgba(0,40,72,0.4)] backdrop-blur-md transition-all duration-200 hover:border-brand hover:bg-brand hover:text-white",
         visible
           ? "translate-y-0 opacity-100"
           : "pointer-events-none translate-y-2 opacity-0",

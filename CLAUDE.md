@@ -120,7 +120,7 @@ ease-out). Rules:
 
 ```
 app/
-  layout.tsx              Root: fonts, metadata, Header/Footer/WhatsApp/BackToTop
+  layout.tsx              Root: fonts, metadata, Header/Footer/BackToTop
   page.tsx                Home — the conversion spine (+ Organization schema)
   payroll/                Flagship service page (deepest)
   recruitment/            Service pitch → leads into jobs
@@ -136,9 +136,9 @@ app/
   sitemap.ts robots.ts not-found.tsx
 
 components/
-  layout/    Header (logo left · centred nav · CTA right), Footer,
-             WhatsAppButton, BackToTop
-  home/      Hero, TrustStrip, ServicePillars, WhyRimaya, CandidateBand, Testimonials
+  layout/    Header (logo left · centred nav · CTA right), Footer, BackToTop
+  home/      Hero, TrustStrip, ServicePillars, WhyRimaya, CandidateBand,
+             Testimonials (+ TrustpilotWidget)
   sections/  PageHero, FeatureCards, CTASection   ← reusable across pages
   jobs/      JobCard, JobsExplorer (client filters), ApplicationForm (client)
   contact/   ContactForm (client, reads ?intent=)
@@ -173,6 +173,15 @@ lib/
   homepage teaser, and each detail page (which are statically generated). Add/remove
   objects only. Upgrade path: swap for a CMS/DB behind the same types.
 - **Company details** → edit [`lib/site.ts`](lib/site.ts).
+- **Testimonials** → `components/home/Testimonials.tsx`. The section shows a curated,
+  single-lane marquee of placeholder quotes **and always renders a "Write a review
+  on Trustpilot" button** (points at `site.trustpilot.writeReviewUrl`). To show
+  *live* Trustpilot reviews that update themselves as customers post them, set both
+  `trustpilot.businessUnitId` and `trustpilot.templateId` in `lib/site.ts` (from a
+  Trustpilot Business account → TrustBox); the section then swaps the curated cards
+  for the official `TrustpilotWidget`. ⚠️ **Trustpilot reviews cannot be scraped**
+  (their pages 403 all bots) and must never be hand-copied into the array as if real
+  — the widget is the only legitimate way to display them.
 
 ---
 
@@ -251,10 +260,10 @@ Search for `TODO` and `NOTE`.
 | What | Where | Priority |
 | --- | --- | --- |
 | **Consulting content** (what the service actually covers) | `app/consulting/page.tsx` | 🔴 Blocking |
-| Contact details (phone, email, address, company/VAT no., WhatsApp, socials) | `lib/site.ts` | 🔴 |
+| Contact details (phone, email, address, company/VAT no., socials) | `lib/site.ts` | 🔴 |
 | Final domain (breaks SEO/sitemap if wrong) | `lib/site.ts` → `url` | 🔴 |
 | Recruitment stats (500+, 1,000+ etc.) | `app/recruitment/page.tsx` | 🟠 |
-| Testimonials (must be real & approved) | `components/home/Testimonials.tsx` | 🟠 |
+| Testimonials — curated placeholders shown until the live Trustpilot TrustBox is switched on (set `trustpilot.businessUnitId` + `templateId`); otherwise replace them with real, approved reviews | `components/home/Testimonials.tsx`, `lib/site.ts` | 🟠 |
 | Job listings | `lib/jobs.ts` | 🟠 |
 | Payroll scope — confirm full B2B bureau vs narrower | `app/payroll/page.tsx` | 🟠 |
 
