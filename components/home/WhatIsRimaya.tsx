@@ -33,9 +33,8 @@ const pairs: { without: string; with: string }[] = [
 // NOTE: placeholder metrics — replace with the client's real, verifiable numbers
 // before launch. Unverifiable stats undermine the credibility this section exists to build.
 const stats = [
-  { value: 12, suffix: "h", label: "Turn around time", sub: "Often much sooner" },
-  { value: 100, suffix: "%", label: "Payroll runs on time", sub: "Across all clients" },
-  { value: 250, suffix: "+", label: "Workers paid monthly", sub: "And growing" },
+  { value: 90, suffix: "%", label: "Payroll runs on time", sub: "Across all clients" },
+  { value: 35, suffix: "+", label: "Workers paid monthly", sub: "And growing" },
   { value: 4.4, decimals: 1, suffix: "★", label: "Client rating", sub: "Rated by real clients" },
 ];
 
@@ -127,10 +126,11 @@ export default function WhatIsRimaya() {
         </Reveal>
 
         {/* Proof line */}
-        <Stagger
-          as="ul"
-          className="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-hairline pt-12 lg:grid-cols-4"
-        >
+        <div className="mt-16 border-t border-hairline pt-12">
+          <Stagger
+            as="ul"
+            className="mx-auto grid max-w-3xl grid-cols-3 gap-x-8 gap-y-10 text-center sm:gap-x-12"
+          >
           {stats.map((s) => (
             <StaggerItem as="li" key={s.label}>
               <p className="font-heading text-4xl font-semibold tracking-tight text-brand sm:text-5xl">
@@ -144,7 +144,8 @@ export default function WhatIsRimaya() {
               <p className="mt-0.5 text-xs text-muted">{s.sub}</p>
             </StaggerItem>
           ))}
-        </Stagger>
+          </Stagger>
+        </div>
       </Container>
     </section>
   );

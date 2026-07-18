@@ -39,7 +39,7 @@ import { cn } from "@/lib/utils";
 // low-commitment question, and collapsing them loses the softer entry point.
 const navLinks = [
   { label: "Services", href: "/#services", hasDropdown: true },
-  { label: "Jobs", href: "/jobs" },
+  // { label: "Jobs", href: "/jobs" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -198,7 +198,7 @@ export default function Header() {
                           })}
 
                           {/* Catches the reader who doesn't know which one is theirs. */}
-                          <div className="flex items-center justify-between gap-4 border-t border-hairline bg-surface px-5 py-4">
+                          {/* <div className="flex items-center justify-between gap-4 border-t border-hairline bg-surface px-5 py-4">
                             <p className="text-xs text-muted">
                               Not sure which you need?
                             </p>
@@ -212,7 +212,7 @@ export default function Header() {
                                 aria-hidden
                               />
                             </Link>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -229,7 +229,7 @@ export default function Header() {
               </nav>
 
               {/* CTA — right rail */}
-              <div className="flex items-center justify-end">
+              {/* <div className="flex items-center justify-end">
                 <Button
                   href="/contact?intent=quote"
                   size="md"
@@ -241,7 +241,7 @@ export default function Header() {
                     aria-hidden
                   />
                 </Button>
-              </div>
+              </div> */}
             </div>
 
             {/* Mobile bar */}
@@ -316,7 +316,7 @@ export default function Header() {
                   ))}
               </ul>
 
-              <div className="pt-6">
+              {/* <div className="pt-6">
                 <Button
                   href="/contact?intent=quote"
                   size="lg"
@@ -326,17 +326,17 @@ export default function Header() {
                   Get a Quote
                   <ArrowRight className="h-4 w-4" aria-hidden />
                 </Button>
-              </div>
+              </div> */}
 
               {/* Same two facts as the desktop strip — they matter most here. */}
               <div className="mt-6 flex flex-col gap-3 border-t border-hairline pt-5">
-                <a
+                {/* <a
                   href={site.phoneHref}
                   className="inline-flex items-center gap-2.5 text-sm font-medium text-ink"
                 >
                   <Phone className="h-4 w-4 text-brand" aria-hidden />
                   {site.phone}
-                </a>
+                </a> */}
                 <a
                   href={`mailto:${site.email}`}
                   className="inline-flex items-center gap-2.5 text-sm font-medium text-ink"
@@ -344,10 +344,10 @@ export default function Header() {
                   <Mail className="h-4 w-4 text-brand" aria-hidden />
                   {site.email}
                 </a>
-                <p className="inline-flex items-center gap-2.5 text-xs text-muted">
+                {/* <p className="inline-flex items-center gap-2.5 text-xs text-muted">
                   <Clock className="h-4 w-4 text-brand" aria-hidden />
                   {site.responsePromise}
-                </p>
+                </p> */}
               </div>
             </Container>
           </div>

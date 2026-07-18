@@ -39,20 +39,6 @@ const pillars: Pillar[] = [
     cta: "Explore Payroll",
   },
   {
-    icon: "/images/recruitment_icon.webp",
-    name: "Recruitment",
-    blurb:
-      "Hire the right people faster — temporary or permanent. Backed by a live job board and a growing pool of vetted candidates.",
-    points: [
-      "Permanent hiring",
-      "Contract staffing",
-      "Temporary recruitment",
-      "Executive search",
-    ],
-    href: "/recruitment",
-    cta: "See Recruitment",
-  },
-  {
     icon: "/images/consultation_icon.webp",
     name: "Consulting",
     blurb:
@@ -66,6 +52,21 @@ const pillars: Pillar[] = [
     href: "/consulting",
     cta: "Discover Consulting",
   },
+  {
+    icon: "/images/recruitment_icon.webp",
+    name: "Talent Sourcing",
+    blurb:
+      "Hire the right people faster — temporary or permanent. Backed by a live job board and a growing pool of vetted candidates.",
+    points: [
+      "Permanent hiring",
+      "Contract staffing",
+      "Temporary recruitment",
+      "Executive search",
+    ],
+    href: "/recruitment",
+    cta: "Explore Talent",
+  },
+  
 ];
 
 /**

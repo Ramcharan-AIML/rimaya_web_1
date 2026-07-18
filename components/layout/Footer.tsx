@@ -10,9 +10,10 @@ const linkGroups: { heading: string; links: { label: string; href: string }[] }[
     heading: "Services",
     links: [
       { label: "Payroll Solutions", href: "/payroll" },
-      { label: "Recruitment", href: "/recruitment" },
       { label: "Consulting", href: "/consulting" },
-      { label: "Get a Quote", href: "/contact?intent=quote" },
+      { label: "Talent Sourcing", href: "/recruitment" },
+      
+      // { label: "Get a Quote", href: "/contact?intent=quote" },
     ],
   },
   {
@@ -79,18 +80,18 @@ export default function Footer() {
               Accurate, compliant payroll, fast recruitment, and expert
               consulting for growing UK businesses.
             </p>
-            <p className="mt-7 inline-flex items-center gap-2 border border-white/25 bg-white/5 px-3.5 py-2.5 text-xs font-semibold text-white/90">
+            {/* <p className="mt-7 inline-flex items-center gap-2 border border-white/25 bg-white/5 px-3.5 py-2.5 text-xs font-semibold text-white/90">
               <Clock className="h-4 w-4 text-action" aria-hidden />
               {site.responsePromise}
-            </p>
-            <ul className="mt-7 space-y-2.5">
+            </p> */}
+            {/* <ul className="mt-7 space-y-2.5">
               {credentials.map(({ icon: Icon, label }) => (
                 <li key={label} className="flex items-center gap-2.5 text-xs text-white/60">
                   <Icon className="h-3.5 w-3.5 shrink-0 text-white/40" aria-hidden />
                   {label}
                 </li>
               ))}
-            </ul>
+            </ul> */}
           </div>
 
           {/* Link groups */}
@@ -128,7 +129,7 @@ export default function Footer() {
                   {site.address.line2}
                 </span>
               </li>
-              <li>
+              {/* <li>
                 <a
                   href={site.phoneHref}
                   className="flex items-center gap-3 transition-colors duration-200 hover:text-white"
@@ -136,7 +137,7 @@ export default function Footer() {
                   <Phone className="h-4 w-4 shrink-0 text-white/40" aria-hidden />
                   {site.phone}
                 </a>
-              </li>
+              </li> */}
               {/* <li>
                 <a
                   href={site.officePhoneHref}
@@ -155,14 +156,14 @@ export default function Footer() {
                   {site.email}
                 </a>
               </li>
-              <li className="flex items-start gap-3">
+              {/* <li className="flex items-start gap-3">
                 <Clock className="mt-0.5 h-4 w-4 shrink-0 text-white/40" aria-hidden />
                 <span className="leading-relaxed">
                   Mon–Fri, 9:00–17:30
                   <br />
                   <span className="text-white/50">UK time</span>
                 </span>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
@@ -190,7 +191,7 @@ export default function Footer() {
             >
               <LinkedinIcon className="h-4 w-4" />
             </a>
-            <a
+            {/* <a
               href={site.socials.instagram}
               target="_blank"
               rel="noopener noreferrer"
@@ -198,7 +199,7 @@ export default function Footer() {
               className="inline-flex h-11 w-11 items-center justify-center border border-white/25 text-white/70 transition-colors duration-200 hover:border-white hover:bg-white hover:text-brand"
             >
               <InstagramIcon className="h-4 w-4" />
-            </a>
+            </a> */}
           </div>
         </div>
       </Container>

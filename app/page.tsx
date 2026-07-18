@@ -67,13 +67,14 @@ export default function HomePage() {
       <TrustStrip />
       <WhatIsRimaya />
       <ServicePillars />
-      <HowItWorks />
-      <QuoteBand />
       <WhyRimaya />
-      <CandidateBand />
+      {/* <HowItWorks /> */}
+      <QuoteBand />
+
+      {/* <CandidateBand /> */}
       <Testimonials />
       <FAQ />
-      <CTASection
+      {/* <CTASection
         eyebrow="Ready when you are"
         title="Let's take the first step together."
         intro="Whether you need payroll sorted, people placed, or expert advice — tell us what you need and we'll come straight back to you."
@@ -81,7 +82,7 @@ export default function HomePage() {
         primaryHref="/contact?intent=quote"
         secondaryLabel="Browse Jobs"
         secondaryHref="/jobs"
-      />
+      /> */}
     </>
   );
 }

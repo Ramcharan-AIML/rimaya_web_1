@@ -61,19 +61,19 @@ export default function Hero() {
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button href="/contact?intent=quote" size="lg">
+            {/* <Button href="/contact?intent=quote" size="lg">
               Get a Payroll Quote
               <ArrowRight className="h-4 w-4" />
-            </Button>
-            <Button href="/jobs" size="lg" variant="secondary">
+            </Button> */}
+            {/* <Button href="/jobs" size="lg" variant="secondary">
               View Jobs
-            </Button>
+            </Button> */}
           </div>
 
-          <p className="mt-6 inline-flex items-center gap-2 text-sm text-muted">
+          {/* <p className="mt-6 inline-flex items-center gap-2 text-sm text-muted">
             <Clock className="h-4 w-4 text-action" aria-hidden />
             {site.responsePromise} — from a named person, not a queue.
-          </p>
+          </p> */}
         </Reveal>
       </Container>
     </section>

@@ -31,9 +31,9 @@ const routes: Route[] = [
   {
     icon: Building2,
     for: "For businesses",
-    title: "Get a quote",
+    title: "Contact Us",
     body: "Tell us your headcount and pay cycle. We'll send back a clear price with no obligation — usually the same working day.",
-    cta: { label: "Get a Quote", href: "/contact?intent=quote" },
+    cta: { label: "Contact Us", href: "/contact?intent=quote" },
     primary: true,
   },
   {
@@ -129,12 +129,12 @@ export default function QuoteBand() {
           ))}
         </Stagger>
 
-        <Reveal delay={0.2}>
+        {/* <Reveal delay={0.2}>
           <p className="mt-10 flex items-center justify-center gap-2 text-sm text-white/70">
             <Clock className="h-4 w-4" aria-hidden />
             {site.responsePromise}
           </p>
-        </Reveal>
+        </Reveal> */}
       </Container>
     </section>
   );
