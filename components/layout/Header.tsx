@@ -168,10 +168,11 @@ export default function Header() {
 
                       <div
                         className={cn(
-                          // Centred under its trigger. This was left-anchored
-                          // when "Services" sat out by the viewport edge, where
-                          // a centred panel hung off-screen. Now the nav is in
-                          // the middle there is room either side.
+                          // Centred under its trigger. "Services" is the
+                          // left-most item of the right-aligned group, so a
+                          // centred panel still has room either side — measured
+                          // at 1440px it lands x 807–1239, and it clears the
+                          // edges at the lg breakpoint too.
                           "absolute left-1/2 top-full w-[27rem] -translate-x-1/2 pt-4 transition-all duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]",
                           servicesOpen
                             ? "visible translate-y-0 opacity-100"
