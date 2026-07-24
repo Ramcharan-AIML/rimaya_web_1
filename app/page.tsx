@@ -7,10 +7,8 @@ import QuoteBand from "@/components/sections/QuoteBand";
 import WhyRimaya from "@/components/home/WhyRimaya";
 import CandidateBand from "@/components/home/CandidateBand";
 import Testimonials from "@/components/home/Testimonials";
-import FAQ from "@/components/sections/FAQ";
 import CTASection from "@/components/sections/CTASection";
 import { site } from "@/lib/site";
-import { faqs } from "@/lib/faq";
 
 const orgSchema = {
   "@context": "https://schema.org",
@@ -36,28 +34,12 @@ const orgSchema = {
   },
 };
 
-// Built from the same source as the rendered accordion, so the structured data
-// always matches what a visitor actually sees.
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
-
 export default function HomePage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* Homepage spine — the story, in order:
@@ -73,7 +55,6 @@ export default function HomePage() {
 
       {/* <CandidateBand /> */}
       <Testimonials />
-      <FAQ />
       {/* <CTASection
         eyebrow="Ready when you are"
         title="Let's take the first step together."

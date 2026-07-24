@@ -25,15 +25,14 @@ const pillars: Pillar[] = [
   {
     icon: "/images/payroll_icon.webp",
     name: "Payroll Solutions",
-    tag: "Flagship",
+    // tag: "Flagship",
     blurb:
       "End-to-end managed payroll for UK employers — accurate, compliant, and on time. From processing to HMRC filings, we run it so you don't have to.",
     points: [
-      "Payroll processing",
-      "HMRC compliance & RTI",
-      "Auto enrolment",
-      "Digital payslips",
-      "Reporting & analytics",
+      "Timely Payroll Processing",
+      "HMRC & Immigration compliances",
+      "Tax efficient package",
+      "lexible payment terms with clients",
     ],
     href: "/payroll",
     cta: "Explore Payroll",
@@ -44,10 +43,10 @@ const pillars: Pillar[] = [
     blurb:
       "Strategic advisory to help you tighten operations and grow with confidence. Practical guidance for when the decision matters.",
     points: [
-      "Financial advisory",
-      "Process improvement",
-      "Business growth",
-      "Strategic planning",
+      "Finance Consulting",
+      "Tech / AI Consulting",
+      "People & HR Advisory",
+      "Accounting Support",
     ],
     href: "/consulting",
     cta: "Discover Consulting",
@@ -58,10 +57,10 @@ const pillars: Pillar[] = [
     blurb:
       "Hire the right people faster — temporary or permanent. Backed by a live job board and a growing pool of vetted candidates.",
     points: [
-      "Permanent hiring",
-      "Contract staffing",
-      "Temporary recruitment",
-      "Executive search",
+      "Robust candidate database",
+      "Personalised approach",
+      "End to end support",
+      "Quick turnaround"
     ],
     href: "/recruitment",
     cta: "Explore Talent",
@@ -101,7 +100,7 @@ export default function ServicePillars() {
           <SectionHeading
             eyebrow="What we do"
             title="Three services. One dependable partner."
-            intro="Pick the need that's yours and go deeper. Payroll is our flagship — but recruitment and consulting are built to the same standard."
+            intro="We always look for long term relationships & sustainable solutions"
           />
         </Reveal>
 
@@ -154,7 +153,12 @@ function PillarCard({ pillar: p }: { pillar: Pillar }) {
       </div>
 
       <h3 className="mt-6 text-2xl font-semibold text-white">{p.name}</h3>
-      <p className="mt-3 text-sm leading-relaxed text-white/75">{p.blurb}</p>
+      {/* The blurb is the flexible element, not a spacer at the foot of the
+          card. Blurbs differ in length (Payroll runs a line longer), so letting
+          this one box absorb the difference bottom-anchors everything below it —
+          the divider, the checklist, and the CTA line up across all three
+          cards instead of drifting with the copy. */}
+      <p className="mt-3 flex-1 text-sm leading-relaxed text-white/75">{p.blurb}</p>
 
       <div aria-hidden className="mt-7 h-px bg-white/15" />
 
@@ -175,15 +179,13 @@ function PillarCard({ pillar: p }: { pillar: Pillar }) {
         ))}
       </ul>
 
-      <div className="mt-8 flex-1" />
-
       {/* Hovering anywhere on the card flips the CTA from a ghost outline to a
           solid white bar with brand-blue text — the card announces where the
           click goes. Colour only: the box is already at its final size, so
           nothing reflows. */}
       <Link
         href={p.href}
-        className="inline-flex items-center justify-between gap-2 border border-white/30 px-4 py-3 text-sm font-semibold text-white transition-colors duration-300 ease-[var(--ease-out-soft)] group-hover:border-white group-hover:bg-white group-hover:text-brand"
+        className="mt-8 inline-flex items-center justify-between gap-2 border border-white/30 px-4 py-3 text-sm font-semibold text-white transition-colors duration-300 ease-[var(--ease-out-soft)] group-hover:border-white group-hover:bg-white group-hover:text-brand"
       >
         {p.cta}
         <ArrowRight

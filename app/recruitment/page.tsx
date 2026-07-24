@@ -2,10 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import recruiterHandshake from "@/public/images/recruitment.webp";
 import {
-  Users,
   Clock,
-  ShieldCheck,
-  Network,
+  Database,
   Handshake,
   UserCheck,
   ArrowRight,
@@ -29,43 +27,44 @@ export const metadata: Metadata = {
 
 // NOTE: placeholder stats — replace with the client's real numbers.
 const stats = [
-  { value: "500+", label: "Placements a year" },
-  { value: "1,000+", label: "Workers on payroll" },
-  { value: "12h", label: "Average response time" },
-  { value: "A-rated", label: "Sponsor licence" },
+  { value: "40+", label: "Placements" },
+  { value: "35+", label: "Workers on payroll" },
+  { value: "24hr", label: "Response time" },
+  { value: "1,000+", label: "Profiles in our database" },
 ];
 
+// Mirrors the Talent Sourcing points shown on the homepage service pillar, so
+// the story is consistent between the front page and this deeper page.
 const features = [
   {
-    icon: Clock,
-    title: "Temporary recruitment",
-    body: "Reliable, vetted temporary staff — often at short notice — with weekly pay handled through our payroll.",
+    icon: Database,
+    title: "Robust candidate database",
+    body: "A deep, growing pool of vetted candidates across sectors — so the right people are ready the moment you need them.",
   },
   {
     icon: UserCheck,
-    title: "Permanent recruitment",
-    body: "The right long-term hire, screened properly, so you bring on people who fit and stay.",
-  },
-  {
-    icon: Network,
-    title: "Extensive candidate network",
-    body: "A deep and growing pool of candidates across sectors — strengthened every day by online applications.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Visa sponsorship",
-    body: "Our A-rated sponsor licence means we can support Skilled Worker visa routes where you need them.",
+    title: "Personalised approach",
+    body: "We take time to understand your business, your team, and the role, so every candidate we put forward genuinely fits.",
   },
   {
     icon: Handshake,
-    title: "A true partnership",
-    body: "We take time to understand your business, so the people we send actually match your needs.",
+    title: "End to end support",
+    body: "From first brief to first day and beyond — screening, onboarding, and the paperwork in between, all handled.",
   },
   {
-    icon: Users,
-    title: "Multi-role clients",
-    body: "From a single hire to whole teams — we scale with you as your headcount grows.",
+    icon: Clock,
+    title: "Quick turnaround",
+    body: "Fast responses and fast delivery — especially when you need reliable people at short notice.",
   },
+];
+
+// The sectors Rimaya recruits into (client-supplied).
+const industries = [
+  "Pharmaceutical",
+  "Hospitality",
+  "Not for profit",
+  "Banking",
+  "Construction",
 ];
 
 export default function RecruitmentPage() {
@@ -87,7 +86,8 @@ export default function RecruitmentPage() {
       {/* Stats */}
       <StatBand stats={stats} />
 
-      {/* Partnership band */}
+      {/* Why contract & temporary staff matter — the client-supplied article,
+          paired with the specialisms we recruit for. */}
       <section className="bg-white py-20 sm:py-24">
         <Container>
           <div className="grid items-center gap-12 lg:grid-cols-[1fr_1fr]">
@@ -106,23 +106,35 @@ export default function RecruitmentPage() {
 
             <Reveal delay={0.1}>
               <SectionHeading
-                eyebrow="Our approach"
-                title="We get to know you before we send anyone."
-                intro="Good recruitment isn't about volume — it's about fit. We take time to understand your business, your team, and the role, so the people we put forward are ones you'd actually hire."
+                eyebrow="Why it matters"
+                title="Why contract and temporary staff are a smart move."
               />
-              <ul className="mt-8 space-y-4">
-                {[
-                  "Every candidate screened and vetted before you meet them",
-                  "Fast turnaround when you need people at short notice",
-                  "Temporary workers paid through our own payroll bureau",
-                  "One point of contact who knows your business",
-                ].map((line) => (
-                  <li key={line} className="flex items-start gap-3 text-sm text-ink/85">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-action" />
-                    {line}
-                  </li>
-                ))}
-              </ul>
+              <div className="mt-6 space-y-4 text-base leading-relaxed text-ink/85">
+                <p>
+                  Contract and temporary staff give a business flexibility it
+                  can&apos;t get any other way. You scale your team up for a busy
+                  period, a project, or a sudden gap — and back down again —
+                  without the cost or long-term commitment of permanent
+                  headcount. The right temporary hire is productive from day one,
+                  covers critical roles the moment they open, and lets you prove
+                  a fit before you make it permanent.
+                </p>
+                <p>
+                  We have a team of qualified accountants who specialise in
+                  finding the right talent for{" "}
+                  <strong className="font-semibold text-ink">Finance</strong>{" "}
+                  roles — though we cover other skills too, including{" "}
+                  <strong className="font-semibold text-ink">IT</strong>,{" "}
+                  <strong className="font-semibold text-ink">
+                    Business Development
+                  </strong>
+                  ,{" "}
+                  <strong className="font-semibold text-ink">
+                    Project Management
+                  </strong>
+                  , and <strong className="font-semibold text-ink">Admin</strong>.
+                </p>
+              </div>
             </Reveal>
           </div>
         </Container>
@@ -133,8 +145,37 @@ export default function RecruitmentPage() {
         title="Recruitment built around your business."
         intro="A practical, relationship-led approach to hiring — for employers who need people they can rely on."
         features={features}
+        columns={2}
         tone="surface"
       />
+
+      {/* Industries we serve */}
+      <section className="border-y border-hairline bg-soft-blue py-16 sm:py-20">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
+            <Reveal>
+              <SectionHeading
+                eyebrow="Sectors"
+                title="Industries we serve."
+                intro="We place people across a broad range of sectors — from regulated, compliance-heavy fields to fast-moving operational teams."
+              />
+            </Reveal>
+            <Reveal delay={0.1}>
+              <ul className="grid gap-3 sm:grid-cols-2">
+                {industries.map((name) => (
+                  <li
+                    key={name}
+                    className="flex items-center gap-3 border border-hairline bg-white px-5 py-4 text-sm font-semibold text-ink transition-colors duration-200 hover:border-action"
+                  >
+                    <CheckCircle2 className="h-5 w-5 shrink-0 text-action" aria-hidden />
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          </div>
+        </Container>
+      </section>
 
       {/* Live jobs teaser */}
       <section className="bg-white py-20 sm:py-24">

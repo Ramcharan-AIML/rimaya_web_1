@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import teamPhoto from "@/public/images/about_team.webp";
+import raviKalra from "@/public/images/ravi_kalra.webp";
 import {
-  CalendarCheck,
   BadgeCheck,
   ShieldCheck,
   Hash,
-  Handshake,
-  HeartHandshake,
+  Lock,
+  Umbrella,
   Award,
   Scale,
-  Rocket,
-  Quote,
+  Timer,
+  HeartHandshake,
+  PiggyBank,
+  MessageCircle,
+  Mail,
+  User,
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Reveal from "@/components/ui/Reveal";
@@ -19,9 +22,8 @@ import { SectionHeading, Eyebrow } from "@/components/ui/SectionHeading";
 import PageHero from "@/components/sections/PageHero";
 import CTASection from "@/components/sections/CTASection";
 import StatBand from "@/components/sections/StatBand";
-import TestimonialsCarousel from "@/components/home/TestimonialsCarousel";
+import Testimonials from "@/components/home/Testimonials";
 import { site } from "@/lib/site";
-import { testimonials } from "@/lib/testimonials";
 
 export const metadata: Metadata = {
   title: "About",
@@ -44,9 +46,9 @@ const proof = [
 
 const credentials = [
   {
-    icon: CalendarCheck,
-    title: `Established ${site.credentials.established}`,
-    body: "A UK-registered company, built to be a dependable long-term partner.",
+    icon: Hash,
+    title: site.credentials.companyNo,
+    body: "A registered, accountable business in England & Wales you can verify.",
   },
   {
     icon: BadgeCheck,
@@ -59,39 +61,56 @@ const credentials = [
     body: "We can sponsor Skilled Worker visas — a genuine advantage for employers.",
   },
   {
-    icon: Hash,
-    title: site.credentials.companyNo,
-    body: "A registered, accountable business you can verify.",
-  },
-];
-
-const values = [
-  {
-    icon: Handshake,
-    title: "Collaboration",
-    body: "We work with you, not just for you — as an extension of your team.",
+    icon: Lock,
+    title: "ICO registered",
+    body: "Registered with the Information Commissioner's Office — your data is handled properly.",
   },
   {
-    icon: HeartHandshake,
-    title: "Customer obsession",
-    body: "Your outcome comes first. We measure ourselves by how well we serve you.",
+    icon: Umbrella,
+    title: "Fully insured",
+    body: "Employer's Liability, Professional Indemnity, and Public Liability insurance in place.",
   },
   {
     icon: Award,
-    title: "Quality",
-    body: "Accurate, careful work — because in payroll and hiring, details matter.",
-  },
-  {
-    icon: Scale,
-    title: "Ethics",
-    body: "Honest advice and fair dealing, every time. No fine print games.",
-  },
-  {
-    icon: Rocket,
-    title: "Entrepreneurial spirit",
-    body: "We move quickly, think practically, and help ambitious businesses grow.",
+    title: "Qualified Chartered Accountants",
+    body: "Led by ACA-qualified professionals — real financial expertise behind every engagement.",
   },
 ];
+
+// Values are the same set as "Reasons to choose us" on the homepage, so the two
+// pages tell one consistent story.
+const values = [
+  {
+    icon: Scale,
+    title: "Ethical",
+    body: "We do right by workers and clients alike — fair treatment and honest advice, every time.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Compliant",
+    body: "Careful and correct. Your payroll and hiring stay on the right side of the rules.",
+  },
+  {
+    icon: Timer,
+    title: "Quickest turnaround",
+    body: "Fast responses and fast delivery — we reply quickly and move at your pace.",
+  },
+  {
+    icon: HeartHandshake,
+    title: "Client obsession",
+    body: "Clients sit at the heart of everything we do — your outcome drives every decision we make.",
+  },
+  {
+    icon: PiggyBank,
+    title: "Cost efficiency",
+    body: "Clear value and honest pricing — no bloated fees, no surprises on the invoice.",
+  },
+];
+
+// NOTE: placeholder team — names only, with an icon stand-in for each headshot.
+// Drop each member's real photo into public/images/ and swap the icon tile for
+// an <Image> when the photos are available.
+const team = ["Ian", "VJ", "Sudha", "Beena", "Params", "Ravi", "Ann", "Ray", "Guy", "Jonah"];
 
 export default function AboutPage() {
   return (
@@ -108,63 +127,78 @@ export default function AboutPage() {
       {/* Proof band — facts before claims. */}
       <StatBand stats={proof} />
 
-      {/* Story */}
+      {/* Meet the director — the founder's photo leads the introduction, so the
+          page opens on a real, named person rather than a faceless company. */}
       <section className="bg-white py-20 sm:py-24">
         <Container>
-          <div className="grid items-center gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">
+          <div className="grid items-start gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
             <Reveal>
-              <SectionHeading
-                eyebrow="Our story"
-                title="Started in 2022, focused on doing the essentials brilliantly."
-              />
-              <div className="mt-6 space-y-4 text-base leading-relaxed text-ink/85">
-                <p>
-                  Rimaya began with payroll — the kind of work that has to be right
-                  every single time. From there, we grew naturally into
-                  recruitment and consulting, because the businesses we served
-                  needed people and advice they could trust just as much as
-                  accurate payslips.
-                </p>
-                <p>
-                  Today we help UK businesses run leaner and hire smarter, while
-                  connecting candidates with roles that fit. We&apos;re proud to be
-                  a real, registered company with real credentials — and a team
-                  that actually picks up the phone.
-                </p>
+              <div className="relative">
+                <div className="relative aspect-[4/5] w-full overflow-hidden border border-hairline card-shadow">
+                  <Image
+                    src={raviKalra}
+                    alt="Ravi Kalra, ACA — Director and Founder of Rimaya Ltd"
+                    fill
+                    placeholder="blur"
+                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    className="object-cover object-[center_20%]"
+                  />
+                </div>
+                {/* Anchored name plate — reads as a caption on the photo. */}
+                <div className="absolute -bottom-5 left-5 border border-hairline bg-brand px-5 py-4 text-white card-shadow sm:left-8">
+                  <p className="text-xs uppercase tracking-[0.18em] text-white/70">
+                    Director &amp; Founder
+                  </p>
+                  <p className="mt-1 text-lg font-semibold">Ravi Kalra, ACA</p>
+                </div>
               </div>
-
-              {/* The belief the whole business runs on, stated plainly. */}
-              <blockquote className="mt-8 border-l-2 border-action bg-surface p-6">
-                <Quote className="h-5 w-5 text-brand" aria-hidden />
-                <p className="mt-3 text-base font-medium leading-relaxed text-ink">
-                  Get payroll wrong and nothing else matters. Get it right, every
-                  time, and you earn the right to help with everything else.
-                </p>
-                <footer className="mt-3 text-sm text-muted">
-                  How we&apos;ve worked since day one
-                </footer>
-              </blockquote>
             </Reveal>
 
             <Reveal delay={0.1}>
-              <div className="relative">
-                <div className="relative aspect-[3/2] w-full overflow-hidden border border-hairline card-shadow">
-                  <Image
-                    src={teamPhoto}
-                    alt="The Rimaya team working together around a desk in their office"
-                    fill
-                    placeholder="blur"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover"
-                  />
-                </div>
-                {/* Anchored tag — reads as a caption on the photo, not a stray card. */}
-                <div className="absolute -bottom-5 left-5 border border-hairline bg-brand px-5 py-4 text-white card-shadow sm:left-8">
-                  <p className="text-xs uppercase tracking-[0.18em] text-white/70">
-                    Flagship service
-                  </p>
-                  <p className="mt-1 text-lg font-semibold">Payroll, done right</p>
-                </div>
+              <SectionHeading
+                eyebrow="Meet the director"
+                title="A chartered accountant who founded Rimaya to do staffing properly."
+              />
+              <div className="mt-6 space-y-4 text-base leading-relaxed text-ink/85">
+                <p>
+                  As a Chartered Accountant and Director of Rimaya Ltd, I bring
+                  over 14 years of finance and accounting experience across Big 4
+                  (EY), Automotive, Media, and Non-Profit industries. I founded
+                  Rimaya Ltd in March 2022 with a clear vision: to provide a
+                  staffing service that truly understands the nuances of finance
+                  roles and delivers with excellence.
+                </p>
+                <p>
+                  At Rimaya, I go beyond one-off placements — I focus on building
+                  long-term partnerships by delivering tailored staffing solutions
+                  that empower businesses to build high-performing finance teams.
+                  With hands-on industry knowledge and an unwavering commitment to
+                  client satisfaction, I provide dedicated support to ensure both
+                  clients and candidates achieve their goals. Staffing is more than
+                  a service for me — it&apos;s my passion, and a way to strengthen
+                  our professional community.
+                </p>
+              </div>
+
+              {/* Direct line to the founder. Phone is WhatsApp only. */}
+              <div className="mt-8 flex flex-col gap-3 border-t border-hairline pt-6 sm:flex-row sm:flex-wrap sm:gap-x-8">
+                <a
+                  href={`https://wa.me/${site.whatsapp}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2.5 text-sm font-medium text-ink transition-colors hover:text-action"
+                >
+                  <MessageCircle className="h-4 w-4 text-action" aria-hidden />
+                  {site.phone}
+                  <span className="text-xs font-normal text-muted">(WhatsApp)</span>
+                </a>
+                <a
+                  href="mailto:ravi.kalra@rimaya.co.uk"
+                  className="group inline-flex items-center gap-2.5 text-sm font-medium text-ink transition-colors hover:text-action"
+                >
+                  <Mail className="h-4 w-4 text-action" aria-hidden />
+                  ravi.kalra@rimaya.co.uk
+                </a>
               </div>
             </Reveal>
           </div>
@@ -177,10 +211,10 @@ export default function AboutPage() {
           <SectionHeading
             eyebrow="Credentials"
             title="Real proof you can rely on."
-            intro="These aren't badges for show — they're the reason businesses trust us with something as important as payroll."
+            intro="Registered, insured, and qualified — not badges for show, but the reason businesses trust us with something as important as payroll."
             align="center"
           />
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {credentials.map((c, i) => (
               <Reveal as="article" key={c.title} delay={i * 0.06}>
                 <div className="group relative flex h-full flex-col overflow-hidden border border-hairline bg-white p-7 transition-shadow duration-200 hover:card-shadow-hover">
@@ -209,12 +243,12 @@ export default function AboutPage() {
               <div className="lg:sticky lg:top-28">
                 <Eyebrow>Our values</Eyebrow>
                 <h2 className="mt-4 text-3xl font-semibold leading-[1.15] text-ink sm:text-4xl">
-                  What guides how we work.
+                  Our values are the reasons to choose us.
                 </h2>
                 <p className="mt-5 text-base leading-relaxed text-muted">
-                  Five words that sound like everyone else&apos;s until you watch
-                  how a company behaves on a bad day. These are the ones we hold
-                  to when it costs us something.
+                  These aren&apos;t words on a wall — they&apos;re how we behave on
+                  a bad day, and they&apos;re exactly why clients pick us and stay
+                  with us.
                 </p>
               </div>
             </Reveal>
@@ -250,25 +284,36 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      {/* Social proof — the same shared list the homepage carousel uses. */}
-      <section className="overflow-hidden border-t border-hairline bg-surface py-20 sm:py-24">
+      {/* Meet the team — compact name tiles with an icon stand-in for each
+          headshot until the real photos land. */}
+      <section className="border-t border-hairline bg-white py-20 sm:py-24">
         <Container>
           <SectionHeading
-            eyebrow="Social proof"
-            title="What clients say about working with us."
-            intro="Real feedback from the businesses that rely on Rimaya day to day."
+            eyebrow="Meet the team"
+            title="The people behind Rimaya."
+            intro="A team you actually get to speak to — no call centres, no ticket numbers."
             align="center"
           />
+          <div className="mx-auto mt-12 grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            {team.map((name, i) => (
+              <Reveal as="article" key={name} delay={Math.min(i, 6) * 0.05}>
+                <div className="group flex flex-col items-center gap-3 border border-hairline bg-white p-4 text-center transition-shadow duration-300 ease-[var(--ease-out-soft)] hover:card-shadow-hover">
+                  {/* Icon placeholder — swap for an <Image> when the real photo
+                      is available. Square, to match the sharp-corner brand. */}
+                  <span className="inline-flex h-14 w-14 items-center justify-center bg-[linear-gradient(135deg,var(--color-surface-blue),#ffffff)] text-brand/45 ring-1 ring-hairline transition-colors duration-300 group-hover:text-brand/70">
+                    <User className="h-7 w-7" />
+                  </span>
+                  <p className="text-sm font-semibold text-ink">{name}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </Container>
-        <Reveal className="mt-12">
-          <Container className="relative">
-            <TestimonialsCarousel items={testimonials} />
-            <p className="mt-8 text-center text-xs text-muted">
-              Swipe, or use the arrows, to see more.
-            </p>
-          </Container>
-        </Reveal>
       </section>
+
+      {/* Social proof — the full homepage testimonials block, Trustpilot CTAs
+          and all, so both pages present reviews identically. */}
+      <Testimonials />
 
       <CTASection
         eyebrow="Let's work together"

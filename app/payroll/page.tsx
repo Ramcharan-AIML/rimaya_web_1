@@ -36,36 +36,28 @@ export const metadata: Metadata = {
     "Accurate, compliant B2B payroll run for you — processing, RTI, pensions, reporting, and payroll for temporary and contract workers. Get a payroll quote from Rimaya.",
 };
 
+// Mirrors the payroll points shown on the homepage service pillar, so the story
+// is consistent between the front page and this deeper page.
 const coreFeatures = [
   {
-    icon: Calculator,
-    title: "End-to-end payroll processing",
-    body: "Weekly, fortnightly, or monthly payroll run accurately and on time — starters, leavers, and everything in between.",
+    icon: Clock4,
+    title: "Timely payroll processing",
+    body: "Weekly, fortnightly, or monthly — your payroll run accurately and on time, every cycle, without missed deadlines.",
   },
   {
     icon: FileCheck2,
-    title: "HMRC compliance & RTI",
-    body: "Real Time Information submitted correctly, PAYE and NIC reconciled, and full compliance kept up to date.",
+    title: "HMRC & immigration compliances",
+    body: "RTI, PAYE, and NIC handled correctly, with the compliance side kept up to date so you stay on the right side of the rules.",
   },
   {
     icon: PiggyBank,
-    title: "Pensions & auto-enrolment",
-    body: "Workplace pension contributions calculated, filed, and managed — so you meet your duties without the headache.",
+    title: "Tax efficient package",
+    body: "Structured to be efficient for your business and your people — you keep more of what you earn, done properly.",
   },
   {
-    icon: Users,
-    title: "Temporary & contract payroll",
-    body: "Confident handling of variable hours, agency, and contract workers — ideal alongside our recruitment service.",
-  },
-  {
-    icon: Clock4,
-    title: "Statutory payments",
-    body: "SSP, SMP, SPP, and other statutory payments calculated and applied correctly, every cycle.",
-  },
-  {
-    icon: BarChart3,
-    title: "Clear management reporting",
-    body: "Payslips, P60s, and clear reports that give you and your accountant a clean, accurate picture.",
+    icon: ArrowLeftRight,
+    title: "Flexible payment terms with clients",
+    body: "Arrangements that fit how you actually work — we flex around your pay dates, cycle, and terms, not a fixed template.",
   },
 ];
 
@@ -161,13 +153,18 @@ export default function PayrollPage() {
         title="Full-service payroll, end to end."
         intro="Everything needed to run payroll for your business — accurately, compliantly, and without the stress."
         features={coreFeatures}
+        columns={2}
         tone="surface"
       />
 
-      {/* Beyond payroll — the heading column used to leave a dead right half
+      {/* Removed per client request (was the "Payroll & bookkeeping overlap"
+          section). Kept behind `false` rather than deleted so it can be switched
+          back on without rebuilding it.
+          Beyond payroll — the heading column used to leave a dead right half
           while eight small cards fought for attention below it. Now the copy
           holds one column and the eight capabilities are a single hairline
           matrix in the other: one object, read as a set. */}
+      {false && (
       <section className="bg-white py-20 sm:py-24">
         <Container>
           <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
@@ -213,11 +210,15 @@ export default function PayrollPage() {
           </div>
         </Container>
       </section>
+      )}
 
-      {/* Systems — was a bare row of name chips on a thin strip, which read as
+      {/* Removed per client request (was the "Your systems, not ours" band).
+          Kept behind `false` rather than deleted so it can be switched back on.
+          Systems — was a bare row of name chips on a thin strip, which read as
           filler. It carries a real objection ("do I have to move systems?"), so
           it now gets a full navy band, the answer stated plainly, and the
           white chips pop off the dark. */}
+      {false && (
       <section className="relative isolate overflow-hidden bg-brand-band py-20 text-white sm:py-24">
         <div
           aria-hidden
@@ -277,11 +278,13 @@ export default function PayrollPage() {
           </Reveal>
         </Container>
       </section>
+      )}
 
       <CTASection
+        compact
         eyebrow="Payroll, sorted"
         title="Get a payroll quote today."
-        intro="Tell us about your business and how many people you pay. We'll come back within 12 hours with a clear, no-obligation quote."
+        intro="Tell us about your business and how many people you pay. We'll come back quickly with a clear, no-obligation quote."
         primaryLabel="Get a Payroll Quote"
         primaryHref="/contact?intent=payroll"
         secondaryLabel="See our other services"

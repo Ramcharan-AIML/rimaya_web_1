@@ -66,7 +66,7 @@ export default function SubmitCvPage() {
                   Your details
                 </h2>
                 <p className="mt-1.5 text-sm text-muted">
-                  Two minutes, and {site.responsePromise.toLowerCase()}.
+                  Two minutes, and a named person reviews it personally.
                 </p>
                 <div className="mt-7">
                   <ApplicationForm

@@ -34,20 +34,33 @@ export default function Testimonials() {
           />
         </Reveal>
 
-        {/* Write-a-review CTA — sits above the reviews so a happy client can add
-            theirs in one click. Opens Trustpilot's review flow in a new tab. */}
+        {/* Two Trustpilot routes, both above the reviews: read the real profile
+            (for anyone who wants proof from a source we don't control), or add
+            your own. Both open Trustpilot in a new tab. */}
         <Reveal delay={0.05}>
           <div className="mt-8 flex flex-col items-center gap-3">
-            <Button
-              href={site.trustpilot.writeReviewUrl}
-              variant="secondary"
-              size="md"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <TrustpilotStar className="h-5 w-5" />
-              Write a review on Trustpilot
-            </Button>
+            <div className="flex flex-col items-center gap-3 sm:flex-row">
+              <Button
+                href={site.trustpilot.reviewUrl}
+                variant="secondary"
+                size="md"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <TrustpilotStar className="h-5 w-5" />
+                See our reviews on Trustpilot
+              </Button>
+              <Button
+                href={site.trustpilot.writeReviewUrl}
+                variant="secondary"
+                size="md"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <TrustpilotStar className="h-5 w-5" />
+                Write a review
+              </Button>
+            </div>
             <p className="text-xs text-muted">
               Share your experience — reviews you post on Trustpilot appear here.
             </p>

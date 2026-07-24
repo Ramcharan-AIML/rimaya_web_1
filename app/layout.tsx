@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import BackToTop from "@/components/layout/BackToTop";
+import ScrollToTop from "@/components/layout/ScrollToTop";
 import { site } from "@/lib/site";
 
 const geist = Geist({
@@ -59,6 +60,7 @@ export default function RootLayout({
         suppressHydrationWarning
         className="min-h-full flex flex-col bg-canvas text-ink"
       >
+        <ScrollToTop />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

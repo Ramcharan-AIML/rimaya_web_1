@@ -116,7 +116,7 @@ export default function ContactForm() {
         <h3 className="mt-4 text-xl font-semibold text-ink">Message sent</h3>
         <p className="mt-2 text-sm leading-relaxed text-muted">
           Thanks for getting in touch. A named person has your enquiry and will
-          reply within 12 hours — not a ticket queue.
+          reply personally — not a ticket queue.
         </p>
       </div>
     );

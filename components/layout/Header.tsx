@@ -39,7 +39,7 @@ import { cn } from "@/lib/utils";
 // low-commitment question, and collapsing them loses the softer entry point.
 const navLinks = [
   { label: "Services", href: "/#services", hasDropdown: true },
-  // { label: "Jobs", href: "/jobs" },
+  { label: "Jobs", href: "/jobs" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -93,36 +93,49 @@ export default function Header() {
   const isActive = (href: string) =>
     href.startsWith("/#") ? false : pathname === href || pathname.startsWith(`${href}/`);
 
+  // Clicking the link for the page you're already on is a no-op for the router,
+  // so nothing scrolls. Anchor links (`/#services`) are left alone — those are
+  // meant to travel to a section, not the top.
+  const backToTopIfSamePage = (href: string) => () => {
+    if (!href.includes("#") && href === pathname) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50">
         {/* Main bar */}
         <div
           className={cn(
-            "border-b transition-all duration-300",
+            "relative border-b transition-all duration-300",
             scrolled
               ? "border-hairline bg-white/90 backdrop-blur-xl card-shadow"
               : "border-hairline/70 bg-white/80 backdrop-blur-md",
           )}
         >
+          {/* Brand accent rule — the signature edge along the very top. Absolute,
+              so it adds no height and the spacer below stays correct (§11.9). */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-[linear-gradient(90deg,var(--color-brand),var(--color-action),var(--color-brand))]"
+          />
           <Container>
-            {/* Desktop. Equal 1fr rails either side of an auto centre column
-                put the nav at the true optical centre of the bar — the logo and
-                the CTA are different widths, so a plain flex row would push it
-                off-centre by half that difference. */}
+            {/* Desktop. Logo anchors the left, nav sits hard right — the two
+                ends carry the bar between them, which is why the nav needs no
+                container of its own to look deliberate. */}
             <div
               className={cn(
-                "hidden grid-cols-[1fr_auto_1fr] items-center gap-8 transition-[height] duration-300 lg:grid",
+                "hidden items-center justify-between gap-8 transition-[height] duration-300 lg:flex",
                 scrolled ? "h-[68px]" : "h-20",
               )}
             >
-              {/* Logo — left rail */}
-              <div className="flex justify-start">
-                <Logo />
-              </div>
+              {/* Logo — shrinks with the bar. */}
+              <Logo size={scrolled ? 46 : 54} />
 
-              {/* Nav — centre */}
-              <nav className="flex items-center justify-center gap-9" aria-label="Primary">
+              {/* Nav — right, generously spaced, no background. The links carry
+                  themselves on type and the underline that wipes in on hover. */}
+              <nav className="flex items-center gap-10" aria-label="Primary">
                 {navLinks.map((item) =>
                   item.hasDropdown ? (
                     <div
@@ -221,6 +234,7 @@ export default function Header() {
                       key={item.label}
                       href={item.href}
                       active={isActive(item.href)}
+                      onClick={backToTopIfSamePage(item.href)}
                     >
                       {item.label}
                     </NavLink>
@@ -230,7 +244,7 @@ export default function Header() {
 
               {/* CTA — right rail. Balances the logo on the left so the centred
                   nav sits at the true optical middle of the bar. */}
-              <div className="flex items-center justify-end gap-5">
+              {/* <div className="flex items-center justify-end gap-5">
                 <a
                   href={`mailto:${site.email}`}
                   className="hidden items-center gap-2 text-sm font-medium text-ink/75 transition-colors hover:text-brand xl:inline-flex"
@@ -238,29 +252,23 @@ export default function Header() {
                   <Mail className="h-4 w-4 text-action" aria-hidden />
                   {site.email}
                 </a>
-                <Button
-                  href="/contact?intent=quote"
-                  size="md"
-                  className="group/quote"
-                >
-                  Get a Quote
-                  <ArrowRight
-                    className="h-4 w-4 transition-transform duration-200 group-hover/quote:translate-x-0.5"
-                    aria-hidden
-                  />
-                </Button>
-              </div>
+              </div> */}
             </div>
 
             {/* Mobile bar */}
             <div className="flex h-16 items-center justify-between lg:hidden">
-              <Logo />
+              <Logo size={46} />
               <button
                 type="button"
                 aria-label={mobileOpen ? "Close menu" : "Open menu"}
                 aria-expanded={mobileOpen}
                 onClick={() => setMobileOpen((v) => !v)}
-                className="inline-flex h-11 w-11 items-center justify-center border border-hairline text-ink transition-colors hover:border-action hover:text-action"
+                className={cn(
+                  "inline-flex h-11 w-11 items-center justify-center border transition-colors duration-200",
+                  mobileOpen
+                    ? "border-brand bg-brand text-white"
+                    : "border-hairline bg-white text-ink hover:border-action hover:text-action",
+                )}
               >
                 {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
@@ -311,7 +319,10 @@ export default function Header() {
                     <li key={item.label} className="border-b border-hairline">
                       <Link
                         href={item.href}
-                        onClick={() => setMobileOpen(false)}
+                        onClick={() => {
+                          setMobileOpen(false);
+                          backToTopIfSamePage(item.href)();
+                        }}
                         className={cn(
                           "flex items-center justify-between py-4 text-base font-medium",
                           isActive(item.href) ? "text-action" : "text-ink",
@@ -371,9 +382,11 @@ export default function Header() {
 }
 
 /**
- * Nav link with an underline that wipes in from the left — the same gesture as
- * FooterLink, so hover feels like one system across the page. The current page
- * keeps the underline permanently, which is how you know where you are.
+ * A bare nav link. No container, no chip — the hover does the work: the label
+ * warms to brand blue while an `action` underline wipes in from the left, the
+ * same gesture FooterLink uses so hover feels like one system across the page.
+ * The current page keeps that underline permanently, which is how you know
+ * where you are.
  */
 function NavLink({
   href,
@@ -390,7 +403,7 @@ function NavLink({
       href={href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "group/nav relative inline-flex items-center gap-1 py-1.5 text-sm font-medium transition-colors duration-200",
+        "group/nav relative inline-flex items-center gap-1.5 py-2 text-base font-medium tracking-[-0.01em] transition-colors duration-200",
         active ? "text-brand" : "text-ink/75 hover:text-brand",
       )}
       {...rest}

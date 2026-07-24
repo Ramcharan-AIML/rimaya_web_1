@@ -21,7 +21,8 @@ const linkGroups: { heading: string; links: { label: string; href: string }[] }[
     links: [
       { label: "Browse Jobs", href: "/jobs" },
       { label: "Submit your CV", href: "/submit-cv" },
-      { label: "Common questions", href: "/#faq" },
+      // The homepage FAQ was removed; /contact is where the accordion lives now.
+      { label: "Common questions", href: "/contact#faq" },
     ],
   },
   {
@@ -69,12 +70,12 @@ export default function Footer() {
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.5fr_repeat(3,0.8fr)_1.2fr] lg:gap-10">
           {/* Brand */}
           <div className="lg:pr-6">
-            {/* The exact navbar lockup, on a white plaque. The logo artwork is
-                deep blue and would all but disappear straight onto the navy —
-                the plaque is what lets the real mark be used here rather than a
-                text substitute. */}
-            <span className="inline-flex bg-white px-4 py-3">
-              <Logo />
+            {/* ⚠️ The emblem is deep blue on a TRANSPARENT background — dropped
+                straight onto the navy band it all but disappears (measured: the
+                wordmark inside it sinks into the background entirely). The white
+                plaque is what lets the real mark be used here. */}
+            <span className="inline-flex bg-white p-3">
+              <Logo size={60} />
             </span>
             <p className="mt-6 max-w-xs text-sm leading-relaxed text-white/70">
               Accurate, compliant payroll, fast recruitment, and expert
@@ -174,10 +175,13 @@ export default function Footer() {
             <p>
               © {year} {site.name} Ltd. All rights reserved.
             </p>
+            {/* The registered numbers are the company's proof of existence —
+                shown in full, not abbreviated or buried. */}
+            <p className="mt-1 text-white/70">
+              {site.credentials.companyNo} · {site.credentials.vat}
+            </p>
             <p className="mt-1">
-              {/* {site.credentials.companyNo} ·  */}
-              Registered in England &amp; Wales ·{" "}
-              {site.descriptor}
+              Registered in England &amp; Wales · {site.descriptor}
             </p>
           </div>
 

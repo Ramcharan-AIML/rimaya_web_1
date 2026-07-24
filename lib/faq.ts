@@ -18,7 +18,7 @@ export const faqs: FaqItem[] = [
   },
   {
     q: "How quickly will I hear back?",
-    a: "Within 12 hours on any working day, and usually much sooner. A named person reads your enquiry and replies — you're not joining a ticket queue.",
+    a: "Quickly, on any working day — a named person reads your enquiry and replies, so you're not joining a ticket queue.",
   },
   {
     q: "We already have a payroll provider. Is switching painful?",

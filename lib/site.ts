@@ -21,20 +21,22 @@ export const site = {
   },
   credentials: {
     established: "2022",
-    vat: "VAT registered",
+    // The registered numbers are the company's proof of existence — shown in
+    // full in the footer and on the About/Contact credential lists.
+    vat: "VAT No: 432146133",
     sponsor: "A-rated sponsor licence",
-    companyNo: "Company No. 00000000", // TODO: real registration number
+    companyNo: "Company Registration No: 13972727",
     rating: "4.4",
   },
   socials: {
-    linkedin: "https://www.linkedin.com/", // TODO
+    linkedin: "https://www.linkedin.com/company/rimaya-ltd/?viewAsMember=true",
     // instagram: "https://www.instagram.com/", // TODO
   },
   trustpilot: {
     // Public review profile and the "leave a review" flow. These work today —
     // the evaluate URL is what the "Write a review" button points at.
-    reviewUrl: "https://www.trustpilot.com/review/rimaya.co.uk",
-    writeReviewUrl: "https://www.trustpilot.com/evaluate/rimaya.co.uk",
+    reviewUrl: "https://uk.trustpilot.com/review/rimaya.co.uk",
+    writeReviewUrl: "https://uk.trustpilot.com/evaluate/rimaya.co.uk",
     // ⚠️ Fill BOTH to switch the testimonials section over to LIVE Trustpilot
     // reviews that update automatically as people post them. Get them from a
     // Trustpilot Business account (Integrations → TrustBox):

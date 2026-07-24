@@ -119,13 +119,13 @@ export default function ApplicationForm({
             <>
               Thanks — your CV is with our recruitment team and on file. We&apos;ll
               be in touch as soon as something fits, including roles before
-              they&apos;re advertised. We reply within 12 hours.
+              they&apos;re advertised.
             </>
           ) : (
             <>
               Thanks for applying for <strong className="text-ink">{role}</strong>.
               We&apos;ve got your details and CV, and our team will be in touch
-              about the next steps. We reply within 12 hours.
+              about the next steps.
             </>
           )}
         </p>

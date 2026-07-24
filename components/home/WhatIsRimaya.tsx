@@ -18,11 +18,11 @@ const pairs: { without: string; with: string }[] = [
   },
   {
     without: "HMRC deadlines you hear about late",
-    with: "RTI, pensions and compliance handled",
+    with: "Find competent talent with cultural fit",
   },
   {
     without: "Good candidates gone before you reply",
-    with: "Vetted people ready when you need them",
+    with: "Smoother onboarding offboarding",
   },
   {
     without: "Nobody to ask when the rules change",
@@ -33,9 +33,21 @@ const pairs: { without: string; with: string }[] = [
 // NOTE: placeholder metrics — replace with the client's real, verifiable numbers
 // before launch. Unverifiable stats undermine the credibility this section exists to build.
 const stats = [
-  { value: 90, suffix: "%", label: "Payroll runs on time", sub: "Across all clients" },
-  { value: 35, suffix: "+", label: "Workers paid monthly", sub: "And growing" },
-  { value: 4.4, decimals: 1, suffix: "★", label: "Client rating", sub: "Rated by real clients" },
+  {
+    value: 100,
+    suffix: "%",
+    label: "Payroll run on 25th of every month",
+    // sub: "Every client, without fail",
+  },
+  {
+    value: 97,
+    suffix: "%",
+    label: "Clients come for additional services",
+    // sub: "They come back for more",
+  },
+  { value: 4.4, decimals: 1, suffix: "★", label: "Client rating", 
+    // sub: "Rated by real clients" 
+    },
 ];
 
 export default function WhatIsRimaya() {
@@ -141,7 +153,7 @@ export default function WhatIsRimaya() {
                 />
               </p>
               <p className="mt-3 text-sm font-semibold text-ink">{s.label}</p>
-              <p className="mt-0.5 text-xs text-muted">{s.sub}</p>
+              {/* <p className="mt-0.5 text-xs text-muted">{s.sub}</p> */}
             </StaggerItem>
           ))}
           </Stagger>

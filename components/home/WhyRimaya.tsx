@@ -6,6 +6,7 @@ import {
   SlidersHorizontal,
   Scale,
   Handshake,
+  HeartHandshake,
   Eye,
   type LucideIcon,
 } from "lucide-react";
@@ -25,59 +26,68 @@ type Reason = {
   feature?: boolean;
 };
 
+// Order is the hierarchy the client gave (a → e). Ethical leads, so it takes the
+// navy anchor tile; Cost efficiency closes the set. The reasons that aren't in
+// that list are kept commented out rather than deleted — they're still good
+// copy if the list is ever widened again.
 const reasons: Reason[] = [
-  {
-    icon: PiggyBank,
-    title: "Cost efficiency",
-    body: "Clear value and honest pricing — no bloated fees, no surprises on the invoice. You always know what you're paying for.",
-    feature: true,
-    span: "lg:col-span-2",
-  },
-  {
-    icon: Timer,
-    title: "Quickest turnaround",
-    body: "Fast responses and fast delivery. We reply within 12 hours and move at your pace.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Risk mitigated",
-    body: "Compliant, careful, and correct. Your payroll and hiring stay on the right side of the rules.",
-  },
-  {
-    icon: Network,
-    title: "Extensive network",
-    body: "A deep, growing pool of vetted candidates and trusted partners across sectors.",
-  },
-  {
-    icon: SlidersHorizontal,
-    title: "Flexible terms",
-    body: "Arrangements that fit how you actually work — scale up or down without friction.",
-  },
   {
     icon: Scale,
     title: "Ethical",
     body: "We do right by workers and clients alike — fair treatment and honest advice, every time.",
+    feature: true,
     span: "lg:col-span-2",
   },
   {
-    icon: Handshake,
-    title: "Integrity",
-    body: "We keep our word. What we promise at the outset is what you get, without the small print.",
+    icon: ShieldCheck,
+    title: "Compliant",
+    body: "Careful and correct. Your payroll and hiring stay on the right side of the rules.",
+  },
+  {
+    icon: Timer,
+    title: "Quickest turnaround",
+    body: "Fast responses and fast delivery. We reply quickly and move at your pace.",
+  },
+  {
+    icon: HeartHandshake,
+    title: "Client obsession",
+    body: "Clients sit at the heart of everything we do — your outcome drives every decision we make.",
     span: "lg:col-span-2",
   },
   {
-    icon: Eye,
-    title: "Transparent",
-    body: "Clear pricing and open communication — you always know where things stand and why.",
+    icon: PiggyBank,
+    title: "Cost efficiency",
+    body: "Clear value and honest pricing — no bloated fees, no surprises on the invoice. You always know what you're paying for.",
     span: "lg:col-span-2",
   },
+  // {
+  //   icon: Network,
+  //   title: "Extensive network",
+  //   body: "A deep, growing pool of vetted candidates and trusted partners across sectors.",
+  // },
+  // {
+  //   icon: SlidersHorizontal,
+  //   title: "Flexible terms",
+  //   body: "Arrangements that fit how you actually work — scale up or down without friction.",
+  // },
+  // {
+  //   icon: Handshake,
+  //   title: "Integrity",
+  //   body: "We keep our word. What we promise at the outset is what you get, without the small print.",
+  //   span: "lg:col-span-2",
+  // },
+  // {
+  //   icon: Eye,
+  //   title: "Transparent",
+  //   body: "Clear pricing and open communication — you always know where things stand and why.",
+  //   span: "lg:col-span-2",
+  // },
 ];
 
 /**
- * A bento of eight reasons on a four-column grid. Widened tiles (the navy
- * "cost efficiency" anchor and the three value tiles) break the monotony of a
- * uniform grid so the eye has somewhere to land, while the spans are chosen so
- * every row fills exactly — no trailing gaps: rows of (2+1+1), (1+1+2), (2+2).
+ * A bento of five reasons on a four-column grid. The navy "Ethical" anchor
+ * carries the top of the client's stated hierarchy, and the spans are chosen so
+ * every row fills exactly — no trailing gaps: rows of (2+1+1) and (2+2).
  */
 export default function WhyRimaya() {
   return (

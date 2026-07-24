@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import Link from "next/link";
 import {
   MapPin,
   Clock,
@@ -7,18 +8,22 @@ import {
   CalendarCheck,
   ShieldCheck,
   Building2,
+  Mail,
+  FileUp,
+  ArrowRight,
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Reveal from "@/components/ui/Reveal";
 import PageHero from "@/components/sections/PageHero";
 import FAQ from "@/components/sections/FAQ";
 import ContactForm from "@/components/contact/ContactForm";
+import { LinkedinIcon } from "@/components/ui/SocialIcons";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Get in touch with Rimaya for payroll, recruitment, or consulting. Real UK office, direct phone, WhatsApp, and email — a named person replies within 12 hours.",
+    "Get in touch with Rimaya for payroll, recruitment, or consulting. Submit your CV, email our team, or connect on LinkedIn — a named person replies personally, not a ticket queue.",
 };
 
 /**
@@ -66,6 +71,86 @@ export default function ContactPage() {
         title="Let's talk."
         intro="Tell us what you need — payroll, people, or advice — and we'll come straight back to you with a real answer. No jargon, no pressure, no sales calls."
       />
+
+      {/* Two ways in — candidates and businesses routed to the right place. */}
+      <section className="bg-white py-14 sm:py-16">
+        <Container>
+          <div className="grid gap-5 md:grid-cols-2">
+            {/* Candidate enquiry — send a CV. */}
+            <Link
+              href="/submit-cv"
+              className="group relative flex h-full flex-col overflow-hidden border border-hairline bg-white p-7 transition-shadow duration-200 hover:card-shadow-hover"
+            >
+              <span
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-action transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100"
+              />
+              <span className="inline-flex h-12 w-12 items-center justify-center bg-brand text-white">
+                <FileUp className="h-5 w-5" />
+              </span>
+              <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+                Candidate enquiry
+              </p>
+              <p className="mt-1.5 text-lg font-semibold text-ink transition-colors group-hover:text-action">
+                Submit your CV
+              </p>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
+                Looking for work? Send us your CV — we&apos;re hiring across
+                sectors and will match you to openings, including roles before
+                they&apos;re advertised.
+              </p>
+              <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-action">
+                Submit your CV
+                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+
+            {/* Business enquiry — email us. */}
+            <a
+              href={`mailto:${site.email}`}
+              className="group relative flex h-full flex-col overflow-hidden border border-hairline bg-white p-7 transition-shadow duration-200 hover:card-shadow-hover"
+            >
+              <span
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-action transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100"
+              />
+              <span className="inline-flex h-12 w-12 items-center justify-center bg-brand text-white">
+                <Mail className="h-5 w-5" />
+              </span>
+              <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+                Business enquiry
+              </p>
+              <p className="mt-1.5 text-lg font-semibold text-ink transition-colors group-hover:text-action">
+                {site.email}
+              </p>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
+                Payroll, recruitment, or consulting — email us and a named person
+                will read it and reply personally.
+              </p>
+              <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-action">
+                Send an email
+                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+              </span>
+            </a>
+          </div>
+
+          {/* LinkedIn — the company page. */}
+          <div className="mt-5 flex flex-col items-center justify-center gap-3 border border-hairline bg-surface px-6 py-5 text-center sm:flex-row sm:gap-4">
+            <p className="text-sm text-muted">
+              Prefer to keep in touch on social? We&apos;re on LinkedIn.
+            </p>
+            <a
+              href={site.socials.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 border border-hairline bg-white px-4 py-2.5 text-sm font-semibold text-brand transition-colors hover:border-brand hover:bg-brand hover:text-white"
+            >
+              <LinkedinIcon className="h-4 w-4" />
+              Follow Rimaya on LinkedIn
+            </a>
+          </div>
+        </Container>
+      </section>
 
       {/* Form + reassurance */}
       <section className="border-y border-hairline bg-soft-blue py-16 sm:py-20">

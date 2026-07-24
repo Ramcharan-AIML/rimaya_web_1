@@ -214,7 +214,7 @@ with no visible loss. **Always use `next/image`.**
 
 | File | Placed in |
 | --- | --- |
-| `Logo-1_1.webp` + `Logo-1_2.webp` | `components/ui/Logo.tsx` — R-mark + wordmark, side by side |
+| `logo.webp` | `components/ui/Logo.tsx` — the single square emblem (mark + wordmark + its own navy tile) |
 | `hero_image_back.webp` | Homepage hero (LCP) + ServicePillars backdrop |
 | `payroll.webp` | Payroll page (branded Rimaya dashboard) |
 | `recruitment.webp` | Recruitment page ("Our approach") |
@@ -232,8 +232,11 @@ To re-add art: drop the original in `Images/`, convert to WebP into
 `public/images/` (sharp is already available: `.webp({ quality: 80, effort: 6 })`
 for photos, `90` for flat art with alpha), then import it.
 
-⚠️ The logos are **deep blue** — great on white, low contrast on navy. On dark bands
-use `<Logo variant="light" />` (R-mark on a white tile + white text wordmark).
+⚠️ The logo is **one square emblem on a transparent background**, and its artwork
+is **deep blue** — great on white, near-invisible on navy. On dark bands it needs
+a white plaque behind it (see the footer). Resize with `<Logo size={60} />`.
+Opening `logo.webp` in a viewer makes it *look* like it has its own navy tile —
+that's the viewer compositing the alpha; the corners are measurably `alpha 0`.
 
 **Favicons** (`app/favicon.ico`, `app/icon.png`, `app/apple-icon.png`) are generated
 from the R-mark. `favicon.ico` is a real 16/32/48/256 multi-size ICO — browsers
@@ -307,16 +310,16 @@ bigger volume play); job-board backend (email-only vs email + submissions dashbo
    React compared the server's HTML to the mutated DOM and reported the diff on
    every load. It was removed. If you ever reintroduce pre-paint DOM state, the
    element you mutate needs `suppressHydrationWarning` — see #12.
-10. **Size the logo's INK, not its box.** The two files carry very different
-   internal padding — measured from the pixels: `Logo-1_1` is 95% glyph
-   (ink 416×425 in a 432×447 box), `Logo-1_2` only 78% letterform
-   (ink 767×116 in a 787×149 box). So equal-looking `height` values lie: 34px/24px
-   rendered a 32px glyph against 19px letters (ratio 1.7 — the mark visibly
-   dwarfing the name). `Logo.tsx` works backwards from the ink instead: set `CAP`
-   (on-screen cap height) and the boxes derive from the measured ratios. That is
-   why the two boxes end up nearly the same height (29 vs 26) — it looks wrong in
-   the code and right on screen. Verify by measuring the rendered `<img>` boxes,
-   not by eyeballing the numbers.
+10. **The logo is one square emblem, not a two-part lockup.** It used to be an
+   R-mark plus a separate wordmark whose boxes had to be sized from their *ink*
+   (they carried very different internal padding). That's gone: `logo.webp` is a
+   single 1:1 image with the mark and the wordmark together — just
+   `<Logo size={n} />`. ⚠️ Two traps. Its background is **transparent** and the art
+   is deep blue, so it still needs the white plaque on the navy footer — opening
+   the file in a viewer makes it look like it carries its own navy tile, but the
+   corners measure `alpha 0`. And the wordmark inside it is small relative to the
+   canvas, so it stops being legible below ~40px; the R-mark is what carries
+   recognition at header size.
 11. **JSX ate a space** in `` `{a} of {b} live roles` `` → rendered "9live". Where an
    expression butts against text across a line wrap, use a template literal or an
    explicit `{" "}` — and check the rendered DOM, not the source.

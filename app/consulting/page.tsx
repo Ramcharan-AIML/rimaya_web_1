@@ -9,6 +9,8 @@ import {
   MessageSquare,
   Search,
   Rocket,
+  Cpu,
+  Calculator,
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Reveal from "@/components/ui/Reveal";
@@ -23,41 +25,28 @@ export const metadata: Metadata = {
     "Practical business consulting from Rimaya — advice to help your business run leaner, safer, and smarter. Book a consultation.",
 };
 
-/**
- * CONTENT NOTE: The specific consulting offering is to be confirmed by the client.
- * The areas below are sensible placeholders that mirror the other service pages.
- * Replace the copy with Rimaya's real consulting services once received.
- */
+// The four consulting services shown on the homepage service pillar, so the
+// list matches what visitors saw on the front page.
 const areas = [
   {
-    icon: ShieldCheck,
-    title: "Compliance & risk",
-    body: "Practical guidance to keep your business on the right side of regulation and reduce avoidable risk.",
+    icon: TrendingUp,
+    title: "Finance Consulting",
+    body: "Clear, practical financial guidance — from planning and cash flow to the decisions that shape how your business grows.",
+  },
+  {
+    icon: Cpu,
+    title: "Tech / AI Consulting",
+    body: "Sensible advice on the tools, systems, and AI that actually move the needle — without the jargon or the hype.",
   },
   {
     icon: Users,
-    title: "People & HR advisory",
+    title: "People & HR Advisory",
     body: "Support with the people side of your business — structure, policy, and getting the best from your team.",
   },
   {
-    icon: TrendingUp,
-    title: "Growth & efficiency",
-    body: "A clear-eyed look at where you can save, streamline, and grow — with steps you can actually act on.",
-  },
-  {
-    icon: Settings2,
-    title: "Systems & process",
-    body: "Advice on the tools and processes that make finance, payroll, and operations run smoothly.",
-  },
-  {
-    icon: ClipboardCheck,
-    title: "Financial planning support",
-    body: "Sensible, jargon-free planning to help you make confident decisions about the road ahead.",
-  },
-  {
-    icon: Lightbulb,
-    title: "Tailored advisory",
-    body: "Not sure where to start? Bring us the challenge and we'll help you find a practical way forward.",
+    icon: Calculator,
+    title: "Accounting Support",
+    body: "Reliable accounting help that keeps your numbers accurate and your reporting clean — a partner for your finance function.",
   },
 ];
 
@@ -96,10 +85,13 @@ export default function ConsultingPage() {
         title="Advice that turns into action."
         intro="Wherever you need a clearer head or a second opinion, we bring practical experience — not jargon."
         features={areas}
+        columns={2}
         tone="surface"
       />
 
-      {/* How it works */}
+      {/* Removed per client request (was the "How it works" section). Kept behind
+          `false` rather than deleted so it can be switched back on. */}
+      {false && (
       <section className="bg-white py-20 sm:py-24">
         <Container>
           <SectionHeading
@@ -123,8 +115,10 @@ export default function ConsultingPage() {
           </div>
         </Container>
       </section>
+      )}
 
       <CTASection
+        compact
         eyebrow="Let's talk"
         title="Book a consultation."
         intro="Bring us the challenge you're facing. We'll listen, give you honest advice, and help you find a practical way forward."
